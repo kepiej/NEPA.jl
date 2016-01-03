@@ -73,9 +73,9 @@ function Base.call(D::DDF,Xk::Array,Yk::Array,gxk::Array,gyk::Array)
 
 	#Check for special cases where one of the direction vectors is zero
 	if gxk == zeros(size(gxk))
-		return 1.0+beta
+		return 1.0 + beta
 	elseif gyk == zeros(size(gyk))
-		return 1.0-beta
+		return 1.0 - beta
 	else
 		return beta
 	end
@@ -85,9 +85,9 @@ function Base.call(D::DDF)
 	K = size(D.X,1)
 	beta = Array(Float64,K)
 
-	@parallel for k=1:K
+	@sync @parallel for k=1:K
 		beta[k] = Base.call(D,D.X[k,:],D.Y[k,:],D.gx[k,:],D.gy[k,:])
 	end
-	
+
 	return beta
 end

@@ -43,6 +43,11 @@ D = DEA_VRS(X,Y,input)
 #D = DEA_CRS(X,Y,input)
 #D = DEA_NIRS(X,Y,input)
 #D = DEA_NDRS(X,Y,input)
-@time theta = D() #0.187408 seconds
-@time theta = D() #0.000068 seconds
+@time theta = D() #4.389059 seconds
+@time theta = D() #0.123012 seconds
 println(theta)
+
+LTFP = Luenberger(X,Y,X,Y,X,Y,X,Y)
+println(LTFP())
+println(TEI(LTFP))
+println(TC(LTFP))
