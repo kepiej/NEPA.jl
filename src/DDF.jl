@@ -44,7 +44,7 @@ immutable DDF
 	end
 end
 
-# Solve DDF program with (Xk,Yk) as evaluation point
+# Solve DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
 function Base.call(D::DDF,Xk::Array,Yk::Array,gxk::Array,gyk::Array)
   K,N = size(D.X)
   M = size(D.Y,2)

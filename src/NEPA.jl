@@ -11,6 +11,7 @@ export DEA, DEA_CRS, DEA_VRS, DEA_NIRS, DEA_NDRS
 export FDH, FDH_CRS, FDH_VRS, FDH_NIRS, FDH_NDRS
 export WACM
 export Luenberger,TEI,TC
+export HMB
 
 # Source files
 include("RTS.jl")
@@ -19,5 +20,6 @@ include("DEA.jl")
 include("FDH.jl")
 include("WACM.jl")
 include("luenberger.jl")
+include("HMB.jl")
 
 end

@@ -51,3 +51,6 @@ LTFP = Luenberger(X,Y,X,Y,X,Y,X,Y)
 println(LTFP())
 println(TEI(LTFP))
 println(TC(LTFP))
+
+HMBTFP = HMB(X,Y,X,Y)
+println(HMBTFP())
