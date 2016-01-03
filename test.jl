@@ -1,7 +1,7 @@
-cd("$(homedir())/Documents/Julia")
+cd("$(homedir())/Documents/GitHub")
 
 # Push Documents/Julia on the search path
-push!(LOAD_PATH, "$(homedir())/Documents/Julia")
+push!(LOAD_PATH, "$(homedir())/Documents/GitHub")
 
 using ExcelReaders
 #using MAT
