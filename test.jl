@@ -54,3 +54,6 @@ println(TC(LTFP))
 
 HMBTFP = HMB(X,Y,X,Y)
 println(HMBTFP())
+println(TEI(HMBTFP))
+println(TC(HMBTFP))
+println(SEC(HMBTFP))

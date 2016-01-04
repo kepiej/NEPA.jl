@@ -6,6 +6,6 @@ A toolbox for doing efficiency analysis and computing productivity. Currently, i
 TODO
 
 * <s>Implement directional distance function (DDF)</s>
-* Add Malmquist index, Hicks-Moorsteen TFP index, <s>Luenberger productivity indicator</s> and Luenberger-Hicks-Moorsteen TFP
+* Add Malmquist index, <s>Hicks-Moorsteen TFP index</s>, <s>Luenberger productivity indicator</s> and Luenberger-Hicks-Moorsteen TFP
 * Add outlier detection
 * ...
