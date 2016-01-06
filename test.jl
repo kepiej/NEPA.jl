@@ -39,13 +39,19 @@ input = true
 #println(theta)
 
 #D = DEA(X,Y,input,VRS())
-D = DEA_VRS(X,Y,input)
+#D = DEA_VRS(X,Y,input)
 #D = DEA_CRS(X,Y,input)
 #D = DEA_NIRS(X,Y,input)
 #D = DEA_NDRS(X,Y,input)
-@time theta = D() #4.389059 seconds
-@time theta = D() #0.123012 seconds
-println(theta)
+#@time theta = D() #4.389059 seconds
+#@time theta = D() #0.123012 seconds
+#println(theta)
+
+#data = readdlm("./NEPA/data/GriffellTatjéLovell.txt")
+#X0 = data[:,1]
+#Y0 = data[:,2]
+#X1 = data[:,3]
+#Y1 = data[:,4]
 
 LTFP = Luenberger(X,Y,X,Y,X,Y,X,Y)
 println(LTFP())
