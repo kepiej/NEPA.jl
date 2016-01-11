@@ -51,7 +51,7 @@ function Base.call(D::DDF,Xk::Array,Yk::Array,gxk::Array,gyk::Array)
 
   f = zeros(K+1)
   f[1] = -1
-  l = [0;zeros(K)]
+  l = [-Inf;zeros(K)]
   u = [Inf for i=1:K+1]
 
   sense = Array(Char,N+M)
@@ -67,7 +67,7 @@ function Base.call(D::DDF,Xk::Array,Yk::Array,gxk::Array,gyk::Array)
   if sol.status == :Optimal
     beta = sol.sol[1]
   else
-    beta = Inf
+    beta = -Inf
     println("Error: solution status $(sol.status)")
   end
 
