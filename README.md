@@ -13,11 +13,16 @@ for the various returns to scale assumptions (VRS, CRS, NIRS and NDRS).
 Productivity change can be calculated using
 * Hicks-Moorsteen index
 * Luenberger productivity indicator
+
 and decomposed in the various components (technical change, technical (in)efficiency change, scale (in)efficiency change) to get insight in the drivers of productivity growth.
 
-# Usage
-
-# TODO
+## Usage
+<code>
+using NEPA
+D = DEA(X,Y,true,VRS())
+theta = D()
+</code>
+## TODO
 
 * Add Malmquist index;
 * Luenberger-Hicks-Moorsteen TFP;
