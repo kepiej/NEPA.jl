@@ -1,6 +1,6 @@
 cd("$(homedir())/Documents/GitHub")
 
-# Push Documents/Julia on the search path
+# Push Documents/GitHub on the search path
 push!(LOAD_PATH, "$(homedir())/Documents/GitHub")
 
 using ExcelReaders

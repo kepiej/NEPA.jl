@@ -1,4 +1,4 @@
-__precompile__()
+__precompile__(true)
 module NEPA
 # Nonparametric Efficiency and Productivity Analysis (NEPA)
 
