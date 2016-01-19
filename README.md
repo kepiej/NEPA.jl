@@ -1,5 +1,5 @@
 # NEPA
-[![Build Status](https://travis-ci.org/kepiej/NEPA.svg?branch=master)](https://travis-ci.org/kepiej/NEPA)
+[![Build Status](https://travis-ci.org/kepiej/NEPA.svg?branch=master)](https://travis-ci.org/kepiej/NEPA.jl)
 
 Nonparametric Efficiency and Productivity Analysis for Julia
 
