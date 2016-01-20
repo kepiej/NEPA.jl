@@ -17,9 +17,11 @@ Productivity change can be calculated using
 and decomposed in the various components (technical change, technical (in)efficiency change, scale (in)efficiency change) to get insight in the drivers of productivity growth.
 
 ## Usage
+```julia
   using NEPA
-  D = DEA(X,Y,true,VRS())
+  D = DEA_VRS(X,Y,true)
   theta = D()
+```
 
 ## TODO
 
