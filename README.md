@@ -1,5 +1,5 @@
 # NEPA
-[![Build Status](https://travis-ci.org/kepiej/NEPA.svg?branch=master)](https://travis-ci.org/kepiej/NEPA.jl)
+[![Build Status](https://travis-ci.org/kepiej/NEPA.jl.svg?branch=master)](https://travis-ci.org/kepiej/NEPA.jl)
 
 Nonparametric Efficiency and Productivity Analysis for Julia
 
@@ -17,11 +17,10 @@ Productivity change can be calculated using
 and decomposed in the various components (technical change, technical (in)efficiency change, scale (in)efficiency change) to get insight in the drivers of productivity growth.
 
 ## Usage
-<code>
-using NEPA
-D = DEA(X,Y,true,VRS())
-theta = D()
-</code>
+  using NEPA
+  D = DEA(X,Y,true,VRS())
+  theta = D()
+
 ## TODO
 
 * Add Malmquist index;
