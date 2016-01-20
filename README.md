@@ -19,8 +19,16 @@ and decomposed in the various components (technical change, technical (in)effici
 ## Usage
 ```julia
   using NEPA
-  D = DEA_VRS(X,Y,true)
+
+  # Read in input data in matrix X and output data in matrix Y
+  # with dim(X) = [K,N] and dim(Y) = [K,M] where K is the number of observations, N the number of inputs and M the number of outputs
+
+  # Initialize an input-oriented DEA model with variable returns to scale (VRS)
+  input = true # Set input = false for output-oriented DEA model
+  D = DEA_VRS(X,Y,input)
+  # Solve the model for all K observations. theta is a vector containing K efficiency scores.
   theta = D()
+  # DEA models with other returns to scale can be initialized: DEA_CRS (CRS), DEA_NIRS (IRS), DEA_NDRS (NDRS)
 ```
 
 ## TODO
