@@ -23,12 +23,29 @@ and decomposed in the various components (technical change, technical (in)effici
   # Read in input data in matrix X and output data in matrix Y
   # with dim(X) = [K,N] and dim(Y) = [K,M] where K is the number of observations, N the number of inputs and M the number of outputs
 
+  # Set input = false for output-oriented DEA model
+  input = true
   # Initialize an input-oriented DEA model with variable returns to scale (VRS)
-  input = true # Set input = false for output-oriented DEA model
   D = DEA_VRS(X,Y,input)
   # Solve the model for all K observations. theta is a vector containing K efficiency scores.
   theta = D()
-  # DEA models with other returns to scale can be initialized: DEA_CRS (CRS), DEA_NIRS (IRS), DEA_NDRS (NDRS)
+  # DEA models with other returns to scale can also be initialized:
+  #  - constant return to scale (CRS): DEA_CRS,
+  #  - nonincreasing returns to scale (NIRS): DEA_NIRS,
+  #  - nondecreasing returns to scale (NDRS): DEA_NDRS
+```
+
+Analogeously, FDH models are implemented under the various returns to scale assumptions. The efficiency scores can be computed using the function call:
+
+```julia
+  # Solve FDH model under VRS
+  theta = FDH_VRS(X,Y,input)
+  # Solve FDH model under CRS
+  theta = FDH_CRS(X,Y,input)
+  # Solve FDH model under NIRS
+  theta = FDH_NIRS(X,Y,input)
+  # Solve FDH model under NDRS
+  theta = FDH_NDRS(X,Y,input)
 ```
 
 ## TODO
