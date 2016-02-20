@@ -6,5 +6,27 @@ push!(LOAD_PATH, "$(homedir())/Documents/GitHub")
 using NEPA
 using Base.Test
 
-#Write tests here
-#@test 1 == 1
+# Test DEAData.jl
+X = [1 2 3;4 5 6; 7 8 9]
+Y = [2;5;8]
+Data = DEAData(X,Y)
+
+@test getNrDMU(Data) == 3
+@test getIODim(Data) == (3,1)
+@test getIndexes(Data) == [1,2,3]
+@test size(Data) == (3,)
+
+for i in eachindex(Data)
+  Xk,Yk,gxk,gyk = Data[i]
+  @test (Xk,Yk,gxk,gyk) == (X[i,:],Y[i,:],X[i,:],Y[i,:])
+  @test Xk == gxk
+  @test Yk == gyk
+end
+
+ind = [1,3]
+@test Data[ind] == (X[ind,:],Y[ind,:],X[ind,:],Y[ind,:])
+#FIXME
+@test Data[1:end] == (X,Y,X,Y)
+
+Data = DEAData(X,Y,X,Y,ind)
+@test Data[1:end] == (X[ind,:],Y[ind,:],X[ind,:],Y[ind,:])

@@ -1,4 +1,4 @@
-# We define several Returns to Scale (RS) types. The RS constraint in DEA depends on these RTS type
+# We define several Returns to Scale (RS) types. The RS constraint in DDF depends on these RTS type
 abstract RS
 
 type CRS <: RS

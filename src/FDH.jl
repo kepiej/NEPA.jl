@@ -1,8 +1,8 @@
 # Define shorthand functions depending on the returns to scale
-FDH_CRS = (X,Y,input) -> FDH(X,Y,input,CRS())
-FDH_VRS = (X,Y,input) -> FDH(X,Y,input,VRS())
-FDH_NIRS = (X,Y,input) -> FDH(X,Y,input,NIRS())
-FDH_NDRS = (X,Y,input) -> FDH(X,Y,input,NDRS())
+FDH_CRS(X,Y,input) = FDH(X,Y,input,CRS())
+FDH_VRS(X,Y,input) = FDH(X,Y,input,VRS())
+FDH_NIRS(X,Y,input) = FDH(X,Y,input,NIRS())
+FDH_NDRS(X,Y,input) = FDH(X,Y,input,NDRS())
 
 # Solve FDH program under VRS with (Xk,Yk) as evaluation point
 function FDH(X::Array,Y::Array,input::Bool,RStype::VRS,Xk::Array,Yk::Array)

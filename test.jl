@@ -53,13 +53,13 @@ println(theta)
 #X1 = data[:,3]
 #Y1 = data[:,4]
 
-LTFP = Luenberger(X,Y,X,Y,X,Y,X,Y)
-println(LTFP())
-println(TEI(LTFP))
-println(TC(LTFP))
+#LTFP = Luenberger(X,Y,X,Y,X,Y,X,Y)
+#println(LTFP())
+#println(TEI(LTFP))
+#println(TC(LTFP))
 
-HMBTFP = HMB(X,Y,X,Y)
-println(HMBTFP())
-println(TEI(HMBTFP))
-println(TC(HMBTFP))
-println(SEC(HMBTFP))
+#HMBTFP = HMB(X,Y,X,Y)
+#println(HMBTFP())
+#println(TEI(HMBTFP))
+#println(TC(HMBTFP))
+#println(SEC(HMBTFP))
