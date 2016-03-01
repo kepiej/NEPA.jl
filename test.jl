@@ -38,7 +38,7 @@ input = true
 #theta = FDH_NDRS(X,Y,input)
 #println(theta)
 
-D = DEA(X,Y,input,VRS())
+D = DEA{VRS}(X,Y,input)
 #D = DEA_VRS(X,Y,input)
 #D = DEA_CRS(X,Y,input)
 #D = DEA_NIRS(X,Y,input)
@@ -46,6 +46,9 @@ D = DEA(X,Y,input,VRS())
 @time theta = D() #4.389059 seconds
 @time theta = D() #0.123012 seconds
 println(theta)
+
+D = DDF{Tuple{FreeDisposal,VRS}}(X,Y,X,Y)
+println(D())
 
 #data = readdlm("./NEPA/data/GriffellTatjéLovell.txt")
 #X0 = data[:,1]

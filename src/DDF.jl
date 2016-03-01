@@ -1,45 +1,35 @@
-# The default RTS constraint returns an all zero vector.
-# Constant Returns to Scale (CRS) only imposes \lambda_i >= 0
-function RSconstraint{T <: RS}(K,RStype::T)
-	return zeros(Float64,1,K+1),0,'='
+abstract AbstractDataEnvelopment
+
+type Convex <: AbstractDataEnvelopment
 end
 
-# Variable Returns to Scale (VRS) imposes sum_i{\lambda_i} = 1
-function RSconstraint(K,RStype::VRS)
-	return [0 ones(1,K)],1,'='
-end
-
-# Non-Increasing Returns to Scale (NIRS) imposes sum_i{\lambda_i} <= 1
-function RSconstraint(K,RStype::NIRS)
-	return [0 ones(1,K)],1,'<'
-end
-
-# Non-Decreasing Returns to Scale (NDRS) imposes sum_i{\lambda_i} >= 1
-function RSconstraint(K,RStype::NDRS)
-	return [0 ones(1,K)],1,'>'
+type FreeDisposal <: AbstractDataEnvelopment
 end
 
 # Abstract DEA model
 abstract AbstractDEA
 
-# Convex directional distance function
-immutable DDF <: AbstractDEA
+# Directional distance function
+immutable DDF{T<:Tuple{AbstractDataEnvelopment,RS}} <: AbstractDEA
 	Data::DEAData
-	RSA::Array
-	RSb::Int64
-	RSsense::Char
 
-	function DDF(X,Y,gx,gy,RStype::RS)
+	function DDF(X,Y,gx,gy)
 		# Set the appropriate RTS constraint depending on RStype
-		RSA,RSb,RSsense = RSconstraint(size(X,1),RStype)
-		new(DEAData(X,Y,gx,gy),RSA,RSb,RSsense)
+		new(DEAData(X,Y,gx,gy))
+	end
+
+	function DDF(Data::DEAData)
+		# Set the appropriate RTS constraint depending on RStype
+		new(Data)
 	end
 end
 
-# Solve DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
-function Base.call(D::DDF,Xk::Array,Yk::Array,gxk::Array,gyk::Array)
+# Solve convex DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
+function Base.call{T<:RS}(D::DDF{Tuple{Convex,T}},Xk::Array,Yk::Array,gxk::Array,gyk::Array)
 	K = getNrDMU(D.Data)
 	N,M = getIODim(D.Data)
+
+	RSA,RSb,RSsense = RSconstraint(K,T())
 
   f = zeros(K+1)
   f[1] = -1
@@ -51,12 +41,12 @@ function Base.call(D::DDF,Xk::Array,Yk::Array,gxk::Array,gyk::Array)
 
 	X,Y,gx,gy = D.Data[1:end]
 
-	A = [-gxk' -X'; -gyk' Y'; D.RSA]
-	b = [-Xk[1,:]'; Yk[1,:]'; D.RSb]
+	A = [-gxk' -X'; -gyk' Y'; RSA]
+	b = [-Xk[1,:]'; Yk[1,:]'; RSb]
 	b = b[:]
 
   # Solve linear program
-  sol = linprog(f,A,[sense;D.RSsense],b,l,u)
+  sol = linprog(f,A,[sense;RSsense],b,l,u)
 
   if sol.status == :Optimal
     beta = sol.sol[1]
@@ -73,6 +63,22 @@ function Base.call(D::DDF,Xk::Array,Yk::Array,gxk::Array,gyk::Array)
 	else
 		return beta
 	end
+end
+
+# Solve free disposal DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
+function Base.call(D::DDF{Tuple{FreeDisposal,VRS}},Xk::Array,Yk::Array,gxk::Array,gyk::Array)
+  #TODO Implement for (gxk,gyk) < 0
+  yind = gyk .> 0.0
+  xind = gxk .> 0.0
+  beta = 0.0
+  for i in eachindex(D.Data)
+    Xi,Yi,gxi,gyi = D.Data[i]
+    curmin = minimum([((Yi[yind]-Yk[yind])./gyk[yind]); ((Xk[xind]-Xi[xind])./gxk[xind])])
+    if(curmin > beta)
+      beta = curmin
+    end
+  end
+  return beta
 end
 
 function Base.call(D::DDF)

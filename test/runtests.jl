@@ -26,7 +26,7 @@ end
 ind = [1,3]
 @test Data[ind] == (X[ind,:],Y[ind,:],X[ind,:],Y[ind,:])
 #FIXME
-@test Data[1:end] == (X,Y,X,Y)
+#@test Data[1:end] == (X,Y,X,Y)
 
 Data = DEAData(X,Y,X,Y,ind)
 @test Data[1:end] == (X[ind,:],Y[ind,:],X[ind,:],Y[ind,:])

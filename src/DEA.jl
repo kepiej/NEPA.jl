@@ -1,16 +1,16 @@
 # Define shorthand functions depending on the returns to scale
-DEA_CRS(X,Y,input) = DEA(X,Y,input,CRS())
-DEA_VRS(X,Y,input) = DEA(X,Y,input,VRS())
-DEA_NIRS(X,Y,input) = DEA(X,Y,input,NIRS())
-DEA_NDRS(X,Y,input) = DEA(X,Y,input,NDRS())
+DEA_CRS(X,Y,input) = DEA{CRS}(X,Y,input)
+DEA_VRS(X,Y,input) = DEA{VRS}(X,Y,input)
+DEA_NIRS(X,Y,input) = DEA{NIRS}(X,Y,input)
+DEA_NDRS(X,Y,input) = DEA{NDRS}(X,Y,input)
 
 # DEA is a special case of the DDF where gx or gy is zero depending on the orientation
-immutable DEA <: AbstractDEA
+immutable DEA{T<:RS} <: AbstractDEA
   D::DDF
   input::Bool
 
-  function DEA(X,Y,input,RStype::RS)
-    input ? new(DDF(X,Y,X,zeros(size(Y)),RStype),input) : new(DDF(X,Y,zeros(size(X)),Y,RStype),input)
+  function DEA(X,Y,input)
+    input ? new(DDF{Tuple{Convex,T}}(X,Y,X,zeros(size(Y))),input) : new(DDF{Tuple{Convex,T}}(X,Y,zeros(size(X)),Y),input)
   end
 end
 
