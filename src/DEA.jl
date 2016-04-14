@@ -14,6 +14,10 @@ immutable DEA{T<:RS} <: AbstractDEA
   end
 end
 
+function getData(DMU::DEA)
+	return getData(DMU.D)
+end
+
 function Base.call(DMU::DEA,Xk::Array,Yk::Array)
   return DMU.input ? DMU.D(Xk,Yk,Xk,zeros(size(Yk))) : DMU.D(Xk,Yk,zeros(size(Xk)),Yk)
 end

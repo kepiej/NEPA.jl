@@ -1,5 +1,5 @@
 # Implements the Luenberger productivity growth indicator
-immutable Luenberger
+immutable Luenberger{T<:Tuple{AbstractDataEnvelopment,RS}}
   D0::DDF
   D1::DDF
   K::Int64
@@ -8,14 +8,18 @@ immutable Luenberger
     if(size(X0) != size(X1) || size(Y0) != size(Y1))
       error("The number of DMUs must be the same in both periods!")
     end
-    new(DDF(X0,Y0,gx0,gy0,VRS()),DDF(X1,Y1,gx1,gy1,VRS()),size(X0,1))
+    new(DDF{T}(X0,Y0,gx0,gy0),DDF{T}(X1,Y1,gx1,gy1),size(X0,1))
+  end
+
+  function Luenberger(DDF0::DDF,DDF1::DDF)
+    new(DDF0,DDF1)
   end
 end
 
 function Base.call(L::Luenberger)
   val = Array(Float64,L.K)
   for k=1:L.K
-    val[k] = -L.D0(L.D1.X[k,:],L.D1.Y[k,:],L.D1.gx[k,:],L.D1.gy[k,:]) + L.D1(L.D0.X[k,:],L.D0.Y[k,:],L.D0.gx[k,:],L.D0.gy[k,:])
+    val[k] = -L.D0(L.D1[k]...) + L.D1(L.D0[k]...)
   end
   return (val + L.D0() - L.D1())./2
 end
@@ -25,16 +29,13 @@ function TEI(L::Luenberger)
 end
 
 function TC(L::Luenberger)
-  # Compute technical change (TC0) from period 0 to period 1 using observations at time 0
   TC0 = Array(Float64,L.K)
-  for k=1:L.K
-      TC0[k] = L.D1(L.D0.X[k,:],L.D0.Y[k,:],L.D0.gx[k,:],L.D0.gy[k,:]) - L.D0(L.D0.X[k,:],L.D0.Y[k,:],L.D0.gx[k,:],L.D0.gy[k,:])
-  end
-
-  # Compute technical change (TC1) from period 0 to period 1 using observations at time 1
   TC1 = Array(Float64,L.K)
   for k=1:L.K
-      TC1[k] = L.D1(L.D1.X[k,:],L.D1.Y[k,:],L.D1.gx[k,:],L.D1.gy[k,:]) - L.D0(L.D1.X[k,:],L.D1.Y[k,:],L.D1.gx[k,:],L.D1.gy[k,:])
+      # Compute technical change (TC0) from period 0 to period 1 using observations at time 0
+      TC0[k] = L.D1(L.D0[k]...) - L.D0(L.D0[k]...)
+      # Compute technical change (TC1) from period 0 to period 1 using observations at time 1
+      TC1[k] = L.D1(L.D1[k]...) - L.D0(L.D1[k]...)
   end
 
   # Technical change (TC) is an arithmetic average of TC0 and TC1

@@ -6,8 +6,9 @@ using MathProgBase
 
 # Export functions and types
 export RS, CRS, VRS, NIRS, NDRS
+export AbstractDEA, AbstractDataEnvelopment
 export DEAData, getNrDMU, getIODim, getIndexes, size, linearindexing, getindex
-export AbstractDEA, AbstractDataEnvelopment, Convex, FreeDisposal, DDF
+export Convex, FreeDisposal, DDF
 export DEA, DEA_CRS, DEA_VRS, DEA_NIRS, DEA_NDRS
 export FDH, FDH_CRS, FDH_VRS, FDH_NIRS, FDH_NDRS
 export WACM
@@ -16,12 +17,13 @@ export HMB,TEI,TC,SEC
 
 # Source files
 include("RTS.jl")
+include("AbstractDEA.jl")
 include("DEAData.jl")
 include("DDF.jl")
 include("DEA.jl")
 include("FDH.jl")
 include("WACM.jl")
-include("luenberger.jl")
+include("Luenberger.jl")
 include("HMB.jl")
 
 end

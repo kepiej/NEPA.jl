@@ -38,7 +38,7 @@ Base.size(Data::DEAData) = (length(Data.indexes),)
 Base.linearindexing(::Type{DEAData}) = Base.LinearFast()
 
 function Base.getindex(Data::DEAData,i::Int)
-  1 <= i <= length(Data.indexes) || throw(BoundsError(Data, i))
+  1 <= i <= size(Data,1) || throw(BoundsError(Data, i))
   return Data.X[Data.indexes[i],:],Data.Y[Data.indexes[i],:],Data.gx[Data.indexes[i],:],Data.gy[Data.indexes[i],:]
 end
 

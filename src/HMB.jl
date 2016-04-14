@@ -10,18 +10,18 @@ immutable HMB
     if(size(X0) != size(X1) || size(Y0) != size(Y1))
       error("The number of DMUs must be the same in both periods!")
     end
-    new(DEA(X0,Y0,true,VRS()),DEA(X1,Y1,true,VRS()),DEA(X0,Y0,false,VRS()),DEA(X1,Y1,false,VRS()),size(X0,1))
+    new(DEA{VRS}(X0,Y0,true),DEA{VRS}(X1,Y1,true),DEA{VRS}(X0,Y0,false),DEA{VRS}(X1,Y1,false),size(X0,1))
   end
 end
 
 # Compute the HMB index
 function Base.call(H::HMB)
-  TFP = Array(Float64,H.K)
   MO0 = Array(Float64,H.K)
   MO1 = Array(Float64,H.K)
   MI0 = Array(Float64,H.K)
   MI1 = Array(Float64,H.K)
   for k=1:H.K
+    #FIXME Adapt to work with rewrite of DDF and DEAData!
     MO0[k] = H.Out0(H.Out0.D.X[k,:],H.Out1.D.Y[k,:])/H.Out0(H.Out0.D.X[k,:],H.Out0.D.Y[k,:])
     MO1[k] = H.Out1(H.Out1.D.X[k,:],H.Out1.D.Y[k,:])/H.Out1(H.Out1.D.X[k,:],H.Out0.D.Y[k,:])
 

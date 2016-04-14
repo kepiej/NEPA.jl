@@ -10,7 +10,7 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::VRS,Xk::Array,Yk::Array)
     theta = Inf
     domy = find(all(Y .>= Yk,2))
     for k in domy
-      Ixk = find(X[k,:] .> 0.0)
+      Ixk = X[k,:] .> 0.0
       curmin = maximum(X[k,Ixk]./Xk[:,Ixk])
       if(curmin < theta)
         theta = curmin
@@ -20,7 +20,7 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::VRS,Xk::Array,Yk::Array)
     theta = -Inf
     domx = find(all(X .<= Xk,2))
     for k in domx
-      Iyk = find(Y[k,:] .> 0.0)
+      Iyk = Y[k,:] .> 0.0
       curmax = minimum(Y[k,Iyk]./Yk[:,Iyk])
       if(curmax > theta)
         theta = curmax
@@ -36,8 +36,8 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::NDRS,Xk::Array,Yk::Array)
   if(input) #Input-oriented
     theta = Inf
     for k=1:K
-      Ixk = find(X[k,:] .> 0.0)
-      Jyk = find(Y[k,:] .> 0.0)
+      Ixk = X[k,:] .> 0.0
+      Jyk = Y[k,:] .> 0.0
       curmin = max(maximum(Yk[:,Jyk]./Y[k,Jyk]),1.0)*maximum(X[k,Ixk]./Xk[:,Ixk])
       if(curmin < theta)
         theta = curmin
@@ -47,8 +47,8 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::NDRS,Xk::Array,Yk::Array)
     theta = -Inf
     domx = find(all(X .<= Xk,2))
     for k in domx
-      Ixk = find(X[k,:] .> 0.0)
-      Jyk = find(Y[k,:] .> 0.0)
+      Ixk = X[k,:] .> 0.0
+      Jyk = Y[k,:] .> 0.0
       curmax = minimum(Y[k,Jyk]./Yk[:,Jyk])*minimum(Xk[:,Ixk]./X[k,Ixk])
       if(curmax > theta)
         theta = curmax
@@ -64,8 +64,8 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::CRS,Xk::Array,Yk::Array)
   if(input) #Input-oriented
     theta = Inf
     for k=1:K
-      Ixk = find(X[k,:] .> 0.0)
-      Jyk = find(Y[k,:] .> 0.0)
+      Ixk = X[k,:] .> 0.0
+      Jyk = Y[k,:] .> 0.0
       curmin = maximum(Yk[:,Jyk]./Y[k,Jyk])*maximum(X[k,Ixk]./Xk[:,Ixk])
       if(curmin < theta)
         theta = curmin
@@ -74,8 +74,8 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::CRS,Xk::Array,Yk::Array)
   else #Output-oriented
     theta = -Inf
     for k=1:K
-      Ixk = find(X[k,:] .> 0.0)
-      Jyk = find(Y[k,:] .> 0.0)
+      Ixk = X[k,:] .> 0.0
+      Jyk = Y[k,:] .> 0.0
       curmax = minimum(Y[k,Jyk]./Yk[:,Jyk])*minimum(Xk[:,Ixk]./X[k,Ixk])
       if(curmax > theta)
         theta = curmax
@@ -92,8 +92,8 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::NIRS,Xk::Array,Yk::Array)
     theta = Inf
     domy = find(all(Y .>= Yk,2))
     for k in domy
-      Ixk = find(X[k,:] .> 0.0)
-      Jyk = find(Y[k,:] .> 0.0)
+      Ixk = X[k,:] .> 0.0
+      Jyk = Y[k,:] .> 0.0
       curmin = maximum(Yk[:,Jyk]./Y[k,Jyk])*maximum(X[k,Ixk]./Xk[:,Ixk])
       if(curmin < theta)
         theta = curmin
@@ -102,8 +102,8 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::NIRS,Xk::Array,Yk::Array)
   else #Output-oriented
     theta = -Inf
     for k=1:K
-      Ixk = find(X[k,:] .> 0.0)
-      Jyk = find(Y[k,:] .> 0.0)
+      Ixk = X[k,:] .> 0.0
+      Jyk = Y[k,:] .> 0.0
       curmax = minimum(Y[k,Jyk]./Yk[:,Jyk])*min(minimum(Xk[:,Ixk]./X[k,Ixk]),1.0)
       if(curmax > theta)
         theta = curmax
