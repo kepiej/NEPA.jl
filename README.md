@@ -35,18 +35,21 @@ and decomposed in the various components (technical change, technical (in)effici
   #  - nondecreasing returns to scale (NDRS): DEA_NDRS
 ```
 
-Analogeously, FDH models are implemented under the various returns to scale assumptions. The efficiency scores can be computed using the function call:
+Analogeously, FDH models are implemented under the various returns to scale assumptions: the function names are FDH_VRS, FDH_CRS, FDH_NIRS and FDH_NDRS.
+
+The directional distance function (DDF) for a given direction (gx,gy) under a convex VRS technology can be computed using:
 
 ```julia
-  # Solve FDH model under VRS
-  theta = FDH_VRS(X,Y,input)
-  # Solve FDH model under CRS
-  theta = FDH_CRS(X,Y,input)
-  # Solve FDH model under NIRS
-  theta = FDH_NIRS(X,Y,input)
-  # Solve FDH model under NDRS
-  theta = FDH_NDRS(X,Y,input)
+  # Choose direction vectors. Here, we set the direction vectors equal to the observations.
+  gx = X
+  gy = Y
+  # Initialize an input-oriented FDH model under VRS
+  D = DDF{Convex,VRS}(X,Y,gx,gy)
+  # Solve the model for all K observations. beta is a vector containing K efficiency scores.
+  beta = D()
 ```
+
+The tuple {Convex,VRS} in DDF{Convex,VRS} specifies that the DDF is a convex VRS technology. Of course, any other return to scale assumption (CRS, NDRS and NIRS) can be specified in the same way. Finally, non-convex technologies are specified using {FreeDisposal,VRS}. Only VRS is currently implemented for the non-convex DDF.
 
 ## TODO
 

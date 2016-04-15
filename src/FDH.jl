@@ -1,12 +1,26 @@
 # Define shorthand functions depending on the returns to scale
-FDH_CRS(X,Y,input) = FDH(X,Y,input,CRS())
-FDH_VRS(X,Y,input) = FDH(X,Y,input,VRS())
-FDH_NIRS(X,Y,input) = FDH(X,Y,input,NIRS())
-FDH_NDRS(X,Y,input) = FDH(X,Y,input,NDRS())
+FDH_CRS(X,Y,input) = FDH{CRS}(X,Y,input)
+FDH_VRS(X,Y,input) = FDH{VRS}(X,Y,input)
+FDH_NIRS(X,Y,input) = FDH{NIRS}(X,Y,input)
+FDH_NDRS(X,Y,input) = FDH{NDRS}(X,Y,input)
+
+immutable FDH{T<:RS} <: AbstractDEA
+  Data::DEAData
+  input::Bool
+
+  function FDH(X,Y,input)
+    new(DEAData(X,Y),input)
+  end
+end
+
+function getData(F::FDH)
+  return F.Data
+end
 
 # Solve FDH program under VRS with (Xk,Yk) as evaluation point
-function FDH(X::Array,Y::Array,input::Bool,RStype::VRS,Xk::Array,Yk::Array)
-  if(input) #Input-oriented
+function Base.call(F::FDH{VRS},Xk::Array,Yk::Array)
+  X,Y = getData(F)[1:end]
+  if(F.input) #Input-oriented
     theta = Inf
     domy = find(all(Y .>= Yk,2))
     for k in domy
@@ -31,9 +45,10 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::VRS,Xk::Array,Yk::Array)
 end
 
 # Solve FDH program under NDRS with (Xk,Yk) as evaluation point
-function FDH(X::Array,Y::Array,input::Bool,RStype::NDRS,Xk::Array,Yk::Array)
+function Base.call(F::FDH{NDRS},Xk::Array,Yk::Array)
+  X,Y = getData(F)[1:end]
   K = size(X,1)
-  if(input) #Input-oriented
+  if(F.input) #Input-oriented
     theta = Inf
     for k=1:K
       Ixk = X[k,:] .> 0.0
@@ -59,9 +74,10 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::NDRS,Xk::Array,Yk::Array)
 end
 
 # Solve FDH program under CRS with (Xk,Yk) as evaluation point
-function FDH(X::Array,Y::Array,input::Bool,RStype::CRS,Xk::Array,Yk::Array)
+function Base.call(F::FDH{CRS},Xk::Array,Yk::Array)
+  X,Y = getData(F)[1:end]
   K = size(X,1)
-  if(input) #Input-oriented
+  if(F.input) #Input-oriented
     theta = Inf
     for k=1:K
       Ixk = X[k,:] .> 0.0
@@ -86,9 +102,10 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::CRS,Xk::Array,Yk::Array)
 end
 
 # Solve FDH program under NIRS with (Xk,Yk) as evaluation point
-function FDH(X::Array,Y::Array,input::Bool,RStype::NIRS,Xk::Array,Yk::Array)
+function Base.call(F::FDH{NIRS},Xk::Array,Yk::Array)
+  X,Y = getData(F)[1:end]
   K = size(X,1)
-  if(input) #Input-oriented
+  if(F.input) #Input-oriented
     theta = Inf
     domy = find(all(Y .>= Yk,2))
     for k in domy
@@ -111,14 +128,4 @@ function FDH(X::Array,Y::Array,input::Bool,RStype::NIRS,Xk::Array,Yk::Array)
     end
   end
   return theta
-end
-
-# Compute efficiency score for all DMUs
-function FDH(X::Array,Y::Array,input::Bool,RStype::RS)
-	K = size(X,1)
-	theta = Array(Float64,K)
-	for k=1:K
-		theta[k] = FDH(X,Y,input,RStype,X[k,:],Y[k,:])
-	end
-	return theta
 end

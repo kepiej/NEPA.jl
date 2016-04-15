@@ -33,14 +33,14 @@ MapleEff = convert(Array{Float64},MapleEff)
 #Input- or output-oriented?
 input = true
 
-theta = FDH_VRS(X,Y,input)
-println(maximum(abs(theta - MapleEff[:,8])))
-theta = FDH_CRS(X,Y,input)
-println(maximum(abs(theta - MapleEff[:,9])))
-theta = FDH_NIRS(X,Y,input)
-println(maximum(abs(theta - MapleEff[:,10])))
-theta = FDH_NDRS(X,Y,input)
-println(maximum(abs(theta - MapleEff[:,11])))
+D = FDH_VRS(X,Y,input)
+println(maximum(abs(D() - MapleEff[:,8])))
+D = FDH_CRS(X,Y,input)
+println(maximum(abs(D() - MapleEff[:,9])))
+D = FDH_NIRS(X,Y,input)
+println(maximum(abs(D() - MapleEff[:,10])))
+D = FDH_NDRS(X,Y,input)
+println(maximum(abs(D() - MapleEff[:,11])))
 
 #FIXME This is not correct! It should be equal to the FDH_VRS efficiency!
 D = DDF{Tuple{FreeDisposal,VRS}}(X,Y,X,zeros(size(Y)))

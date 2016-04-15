@@ -9,7 +9,7 @@ using Base.Test
 # Test DEAData.jl
 X = [1 2 3;4 5 6; 7 8 9]
 Y = [2;5;8]
-Data = DEAData(X,Y)
+Data = DEAData(X,Y,X,Y)
 
 @test getNrDMU(Data) == 3
 @test getIODim(Data) == (3,1)
@@ -27,5 +27,5 @@ ind = [1,3]
 @test Data[ind] == (X[ind,:],Y[ind,:],X[ind,:],Y[ind,:])
 @test Data[1:end] == (X[1:end,:],Y[1:end,:],X[1:end,:],Y[1:end,:])
 
-Data = DEAData(X,Y,X,Y,ind)
+Data = DEAData(X,Y,X,Y,indexes = ind)
 @test Data[1:end] == (X[ind,:],Y[ind,:],X[ind,:],Y[ind,:])
