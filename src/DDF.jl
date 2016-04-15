@@ -8,7 +8,7 @@ end
 immutable DDF{T<:Tuple{AbstractDataEnvelopment,RS}} <: AbstractDEA
 	Data::DEAData
 
-	function DDF(X,Y,gx,gy)
+	function DDF(X::Array,Y::Array,gx::Array,gy::Array)
 		new(DEAData(X,Y,gx,gy))
 	end
 

@@ -14,6 +14,7 @@ export FDH, FDH_CRS, FDH_VRS, FDH_NIRS, FDH_NDRS
 export WACM
 export Luenberger,TEI,TC
 export HMB,TEI,TC,SEC
+export OrderM
 
 # Source files
 include("RTS.jl")
@@ -25,5 +26,6 @@ include("FDH.jl")
 include("WACM.jl")
 include("Luenberger.jl")
 include("HMB.jl")
+include("OrderM.jl")
 
 end

@@ -8,8 +8,12 @@ immutable FDH{T<:RS} <: AbstractDEA
   Data::DEAData
   input::Bool
 
-  function FDH(X,Y,input)
+  function FDH(X::Array,Y::Array,input::Bool)
     new(DEAData(X,Y),input)
+  end
+
+  function FDH(Data::DEAData)
+    new(Data)
   end
 end
 

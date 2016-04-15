@@ -43,13 +43,13 @@ The directional distance function (DDF) for a given direction (gx,gy) under a co
   # Choose direction vectors. Here, we set the direction vectors equal to the observations.
   gx = X
   gy = Y
-  # Initialize an input-oriented FDH model under VRS
-  D = DDF{Convex,VRS}(X,Y,gx,gy)
+  # Initialize a convex directional distance function under VRS
+  D = DDF{Tuple{Convex,VRS}}(X,Y,gx,gy)
   # Solve the model for all K observations. beta is a vector containing K efficiency scores.
   beta = D()
 ```
 
-The tuple {Convex,VRS} in DDF{Convex,VRS} specifies that the DDF is a convex VRS technology. Of course, any other return to scale assumption (CRS, NDRS and NIRS) can be specified in the same way. Finally, non-convex technologies are specified using {FreeDisposal,VRS}. Only VRS is currently implemented for the non-convex DDF.
+The Tuple{Convex,VRS} in DDF{Tuple{Convex,VRS}} specifies that the DDF is a convex VRS technology. Of course, any other return to scale assumption (CRS, NDRS and NIRS) can be specified in the same way. Finally, non-convex technologies are specified using Tuple{FreeDisposal,VRS}. Only VRS is currently implemented for the non-convex DDF.
 
 ## TODO
 
