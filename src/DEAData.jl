@@ -1,4 +1,4 @@
-immutable DEAData <: AbstractArray{Any,1}
+type DEAData <: AbstractArray{Any,1}
   X::Array
   Y::Array
   gx::Array
@@ -25,16 +25,23 @@ immutable DEAData <: AbstractArray{Any,1}
   end
 end
 
-function getNrDMU(Data::DEAData)
-  return size(Data.X,1)
+function getnrdmu(Data::DEAData)
+  return size(Data,1)
 end
 
-function getIODim(Data::DEAData)
+function getiodim(Data::DEAData)
   return size(Data.X,2), size(Data.Y,2)
 end
 
-function getIndexes(Data::DEAData)
-  return Data.indexes
+function getindexes(Data::DEAData)
+  return copy(Data.indexes)
+end
+
+function setindexes!(Data::DEAData, newindexes::Vector{Int})
+  if(length(newindexes) > length(Data.indexes))
+    error("$(length(newindexes)) > $(length(Data.indexes))!")
+  end
+  Data.indexes = copy(newindexes)
 end
 
 Base.size(Data::DEAData) = (length(Data.indexes),)
@@ -50,7 +57,7 @@ function Base.getindex(Data::DEAData,i::Int)
 end
 
 function Base.getindex(Data::DEAData, I)
-  N,M = getIODim(Data)
+  N,M = getiodim(Data)
   K = length(I)
   X = Array(eltype(Data.X),K,N)
   Y = Array(eltype(Data.Y),K,M)

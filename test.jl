@@ -42,9 +42,9 @@ println(maximum(abs(D() - MapleEff[:,10])))
 D = FDH_NDRS(X,Y,input)
 println(maximum(abs(D() - MapleEff[:,11])))
 
-M = convert(Int,round(3*size(D,1)/4))
-thetaM = OrderM(D,M,100)
-println(thetaM - D())
+#M = convert(Int,round(3*size(D,1)/4))
+#thetaM = OrderM(D,M,100)
+#println(thetaM - D())
 
 #FIXME This is not correct! It should be equal to the FDH_VRS efficiency!
 D = DDF{Tuple{FreeDisposal,VRS}}(X,Y,X,zeros(size(Y)))

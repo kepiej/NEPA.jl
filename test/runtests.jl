@@ -11,9 +11,9 @@ X = [1 2 3;4 5 6; 7 8 9]
 Y = [2;5;8]
 Data = DEAData(X,Y,X,Y)
 
-@test getNrDMU(Data) == 3
-@test getIODim(Data) == (3,1)
-@test getIndexes(Data) == [1,2,3]
+@test getnrdmu(Data) == 3
+@test getiodim(Data) == (3,1)
+@test getindexes(Data) == [1,2,3]
 @test size(Data) == (3,)
 
 for i in eachindex(Data)

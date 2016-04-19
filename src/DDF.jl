@@ -17,14 +17,14 @@ immutable DDF{T<:Tuple{AbstractDataEnvelopment,RS}} <: AbstractDEA
 	end
 end
 
-function getData(D::DDF)
+function getdata(D::DDF)
 	return D.Data
 end
 
 # Solve convex DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
 function Base.call{T<:RS}(D::DDF{Tuple{Convex,T}},Xk::Array,Yk::Array,gxk::Array,gyk::Array)
-	K = getNrDMU(D.Data)
-	N,M = getIODim(D.Data)
+	K = getnrdmu(D.Data)
+	N,M = getiodim(D.Data)
 
 	# Set the appropriate RTS constraint depending on T
 	RSA,RSb,RSsense = RSconstraint(K,T())

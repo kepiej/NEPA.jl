@@ -14,8 +14,8 @@ immutable DEA{T<:RS} <: AbstractDEA
   end
 end
 
-function getData(DMU::DEA)
-	return getData(DMU.D)
+function getdata(DMU::DEA)
+	return getdata(DMU.D)
 end
 
 function Base.call(DMU::DEA,Xk::Array,Yk::Array)

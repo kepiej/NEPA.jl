@@ -17,13 +17,13 @@ immutable FDH{T<:RS} <: AbstractDEA
   end
 end
 
-function getData(F::FDH)
+function getdata(F::FDH)
   return F.Data
 end
 
 # Solve FDH program under VRS with (Xk,Yk) as evaluation point
 function Base.call(F::FDH{VRS},Xk::Array,Yk::Array)
-  X,Y = getData(F)[1:end]
+  X,Y = getdata(F)[1:end]
   if(F.input) #Input-oriented
     theta = Inf
     domy = find(all(Y .>= Yk,2))
@@ -50,7 +50,7 @@ end
 
 # Solve FDH program under NDRS with (Xk,Yk) as evaluation point
 function Base.call(F::FDH{NDRS},Xk::Array,Yk::Array)
-  X,Y = getData(F)[1:end]
+  X,Y = getdata(F)[1:end]
   K = size(X,1)
   if(F.input) #Input-oriented
     theta = Inf
@@ -79,7 +79,7 @@ end
 
 # Solve FDH program under CRS with (Xk,Yk) as evaluation point
 function Base.call(F::FDH{CRS},Xk::Array,Yk::Array)
-  X,Y = getData(F)[1:end]
+  X,Y = getdata(F)[1:end]
   K = size(X,1)
   if(F.input) #Input-oriented
     theta = Inf
@@ -107,7 +107,7 @@ end
 
 # Solve FDH program under NIRS with (Xk,Yk) as evaluation point
 function Base.call(F::FDH{NIRS},Xk::Array,Yk::Array)
-  X,Y = getData(F)[1:end]
+  X,Y = getdata(F)[1:end]
   K = size(X,1)
   if(F.input) #Input-oriented
     theta = Inf
