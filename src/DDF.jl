@@ -53,14 +53,7 @@ function Base.call{T<:RS}(D::DDF{Tuple{Convex,T}},Xk::Array,Yk::Array,gxk::Array
     println("Error: solution status $(sol.status)")
   end
 
-	#Check for special cases where one of the direction vectors is zero
-	if gxk == zeros(size(gxk))
-		return 1.0 + beta
-	elseif gyk == zeros(size(gyk))
-		return 1.0 - beta
-	else
-		return beta
-	end
+	return beta
 end
 
 # Solve free disposal DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
@@ -77,13 +70,6 @@ function Base.call(D::DDF{Tuple{FreeDisposal,VRS}},Xk::Array,Yk::Array,gxk::Arra
       beta = curmin
     end
   end
-
-	#Check for special cases where one of the direction vectors is zero
-	if gxk == zeros(size(gxk))
-		return 1.0 + beta
-	elseif gyk == zeros(size(gyk))
-		return 1.0 - beta
-	else
-		return beta
-	end
+	
+	return beta
 end

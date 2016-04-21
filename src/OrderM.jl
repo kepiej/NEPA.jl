@@ -1,6 +1,6 @@
 
 # Compute order-m efficiency score
-function OrderM{T<:AbstractDEA}(A::T,M::Int,B::Int)
+function orderm{T<:AbstractDEA}(A::T,M::Int,B::Int)
   Data = getdata(A)
   K = getnrdmu(Data)
   Datacopy = deepcopy(Data)
@@ -18,7 +18,7 @@ function OrderM{T<:AbstractDEA}(A::T,M::Int,B::Int)
 end
 
 # Compute order-m efficiency score for FDH
-function OrderM{T<:RS}(A::FDH{T},M::Int,B::Int)
+function orderm{T<:RS}(A::FDH{T},M::Int,B::Int)
   Data = getdata(A)
   K = getnrdmu(Data)
   Datacopy = deepcopy(Data)

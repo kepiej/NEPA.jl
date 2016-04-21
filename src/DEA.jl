@@ -19,9 +19,9 @@ function getdata(DMU::DEA)
 end
 
 function Base.call(DMU::DEA,Xk::Array,Yk::Array)
-  return DMU.input ? DMU.D(Xk,Yk,Xk,zeros(size(Yk))) : DMU.D(Xk,Yk,zeros(size(Xk)),Yk)
+  return DMU.input ? (1 - DMU.D(Xk,Yk,Xk,zeros(size(Yk)))) : (1 + DMU.D(Xk,Yk,zeros(size(Xk)),Yk))
 end
 
 function Base.call(DMU::DEA)
-  return DMU.D()
+  return DMU.input ? (1 - DMU.D()) : (1 + DMU.D())
 end
