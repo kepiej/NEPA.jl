@@ -3,6 +3,7 @@
 function orderm{T<:AbstractDEA}(A::T,M::Int,B::Int)
   Data = getdata(A)
   K = getnrdmu(Data)
+  # getdata() returns a shallow copy of the data in A, but we need a deep copy!
   Datacopy = deepcopy(Data)
   if(M > K)
     error("M cannot be larger than the number of DMUs!")
@@ -14,6 +15,7 @@ function orderm{T<:AbstractDEA}(A::T,M::Int,B::Int)
       theta[j,i] = A(Datacopy[j]...)
     end
   end
+  setindexes!(Data,collect(1:K))
   return mean(theta,2)
 end
 
@@ -21,6 +23,7 @@ end
 function orderm{T<:RS}(A::FDH{T},M::Int,B::Int)
   Data = getdata(A)
   K = getnrdmu(Data)
+  # getdata() returns a shallow copy of the data in A, but we need a deep copy!
   Datacopy = deepcopy(Data)
   if(M > K)
     error("M cannot be larger than the number of DMUs!")
@@ -40,5 +43,6 @@ function orderm{T<:RS}(A::FDH{T},M::Int,B::Int)
       theta[j,i] = A(Xk,Yk)
     end
   end
+  setindexes!(Data,collect(1:K))
   return mean(theta,2)
 end

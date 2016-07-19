@@ -38,8 +38,8 @@ function getindexes(Data::DEAData)
 end
 
 function setindexes!(Data::DEAData, newindexes::Vector{Int})
-  if(length(newindexes) > length(Data.indexes))
-    error("$(length(newindexes)) > $(length(Data.indexes))!")
+  if(length(newindexes) > size(Data.X,1))
+    error("$(length(newindexes)) > $(size(Data.X,1))!")
   end
   Data.indexes = copy(newindexes)
 end

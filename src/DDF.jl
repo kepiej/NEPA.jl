@@ -70,6 +70,6 @@ function Base.call(D::DDF{Tuple{FreeDisposal,VRS}},Xk::Array,Yk::Array,gxk::Arra
       beta = curmin
     end
   end
-	
+
 	return beta
 end

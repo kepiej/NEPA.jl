@@ -55,5 +55,5 @@ The Tuple{Convex,VRS} in DDF{Tuple{Convex,VRS}} specifies that the DDF is a conv
 
 * Add Malmquist index;
 * Luenberger-Hicks-Moorsteen TFP;
-* Add outlier detection;
+* Add more outlier detection methods (order-m is already available);
 * ...
