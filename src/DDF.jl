@@ -5,15 +5,11 @@ type FreeDisposal <: AbstractDataEnvelopment
 end
 
 # Directional distance function
-immutable DDF{T<:Tuple{AbstractDataEnvelopment,RS}} <: AbstractDEA
+immutable DDF{S<:AbstractDataEnvelopment,T<:RS} <: AbstractDEA{S,T}
 	Data::DEAData
 
 	function DDF(X::Array,Y::Array,gx::Array,gy::Array)
 		new(DEAData(X,Y,gx,gy))
-	end
-
-	function DDF(Data::DEAData)
-		new(Data)
 	end
 end
 
@@ -22,7 +18,7 @@ function getdata(D::DDF)
 end
 
 # Solve convex DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
-function Base.call{T<:RS}(D::DDF{Tuple{Convex,T}},Xk::Array,Yk::Array,gxk::Array,gyk::Array)
+function Base.call{T<:RS}(D::DDF{Convex,T},Xk::Array,Yk::Array,gxk::Array,gyk::Array)
 	K = getnrdmu(D.Data)
 	N,M = getiodim(D.Data)
 
@@ -58,11 +54,11 @@ end
 
 # Solve free disposal DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
 #FIXME Check that this is correct!
-function Base.call(D::DDF{Tuple{FreeDisposal,VRS}},Xk::Array,Yk::Array,gxk::Array,gyk::Array)
+function Base.call(D::DDF{FreeDisposal,VRS},Xk::Array,Yk::Array,gxk::Array,gyk::Array)
   #TODO Implement for (gxk,gyk) < 0
   yind = gyk .> 0.0
   xind = gxk .> 0.0
-  beta = 0.0
+  beta = -Inf
   for i in eachindex(D.Data)
     Xi,Yi,gxi,gyi = D.Data[i]
     curmin = minimum([((Yi[yind]-Yk[yind])./gyk[yind]); ((Xk[xind]-Xi[xind])./gxk[xind])])

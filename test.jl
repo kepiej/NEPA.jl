@@ -47,9 +47,8 @@ println(maximum(abs(D() - MapleEff[:,11])))
 #println(thetaM - D())
 
 #FIXME This is not correct! It should be equal to the FDH_VRS efficiency!
-D = DDF{Tuple{FreeDisposal,VRS}}(X,Y,X,zeros(size(Y)))
+D = DDF{FreeDisposal,VRS}(X,Y,X,zeros(size(Y)))
 println(maximum(abs((1 - D()) - MapleEff[:,8])))
-#println(D())
 
 D = DEA_VRS(X,Y,input)
 println(maximum(abs(D() - MapleEff[:,1])))
@@ -62,7 +61,7 @@ println(maximum(abs(D() - MapleEff[:,4])))
 #@time theta = D() #4.389059 seconds
 #@time theta = D() #0.123012 seconds
 
-D = DDF{Tuple{Convex,VRS}}(X,Y,X,zeros(size(Y)))
+D = DDF{Convex,VRS}(X,Y,X,zeros(size(Y)))
 println(maximum(abs((1 - D()) - MapleEff[:,1])))
 
 # Test indexing of DDF object
@@ -80,12 +79,12 @@ println(X[1,:],Y[1,:],X[1,:],zeros(1,size(Y,2)))
 #X1 = data[:,3]
 #Y1 = data[:,4]
 
-#LTFP = Luenberger{Tuple{Convex,VRS}}(X,Y,X,Y,X,Y,X,Y)
+#LTFP = Luenberger{Convex,VRS}(X,Y,X,Y,X,Y,X,Y)
 #println(LTFP())
 #println(TEI(LTFP))
 #println(TC(LTFP))
 
-#HMBTFP = HMB(X,Y,X,Y)
+#HMBTFP = HMB{Convex,VRS}(X,Y,X,Y)
 #println(HMBTFP())
 #println(TEI(HMBTFP))
 #println(TC(HMBTFP))

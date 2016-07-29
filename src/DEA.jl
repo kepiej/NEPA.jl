@@ -5,12 +5,12 @@ DEA_NIRS(X,Y,input) = DEA{NIRS}(X,Y,input)
 DEA_NDRS(X,Y,input) = DEA{NDRS}(X,Y,input)
 
 # DEA is a special case of the DDF where gx or gy is zero depending on the orientation
-immutable DEA{T<:RS} <: AbstractDEA
+immutable DEA{T<:RS} <: AbstractDEA{Convex,T}
   D::DDF
   input::Bool
 
   function DEA(X,Y,input)
-    input ? new(DDF{Tuple{Convex,T}}(X,Y,X,zeros(size(Y))),input) : new(DDF{Tuple{Convex,T}}(X,Y,zeros(size(X)),Y),input)
+    input ? new(DDF{Convex,T}(X,Y,X,zeros(size(Y))),input) : new(DDF{Convex,T}(X,Y,zeros(size(X)),Y),input)
   end
 end
 

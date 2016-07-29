@@ -6,7 +6,7 @@ using MathProgBase
 
 # Export functions and types
 export RS, CRS, VRS, NIRS, NDRS
-export AbstractDEA, AbstractDataEnvelopment
+export AbstractDEA, AbstractDataEnvelopment, getdata
 export DEAData, getnrdmu, getiodim, getindexes, setindexes!, size, linearindexing, getindex
 export Convex, FreeDisposal, DDF
 export DEA, DEA_CRS, DEA_VRS, DEA_NIRS, DEA_NDRS

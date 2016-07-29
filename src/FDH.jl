@@ -4,16 +4,12 @@ FDH_VRS(X,Y,input) = FDH{VRS}(X,Y,input)
 FDH_NIRS(X,Y,input) = FDH{NIRS}(X,Y,input)
 FDH_NDRS(X,Y,input) = FDH{NDRS}(X,Y,input)
 
-immutable FDH{T<:RS} <: AbstractDEA
+immutable FDH{T<:RS} <: AbstractDEA{FreeDisposal,T}
   Data::DEAData
   input::Bool
 
   function FDH(X::Array,Y::Array,input::Bool)
     new(DEAData(X,Y),input)
-  end
-
-  function FDH(Data::DEAData)
-    new(Data)
   end
 end
 

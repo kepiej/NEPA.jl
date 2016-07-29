@@ -29,3 +29,9 @@ ind = [1,3]
 
 Data = DEAData(X,Y,X,Y,indexes = ind)
 @test Data[1:end] == (X[ind,:],Y[ind,:],X[ind,:],Y[ind,:])
+
+# Test AbstractDEA
+@test eltype(AbstractDEA{Convex,VRS}) == (Convex,VRS)
+@test eltype(AbstractDEA{FreeDisposal,VRS}) != (Convex,VRS)
+@test eltype(AbstractDEA{FreeDisposal,CRS}) == (FreeDisposal,CRS)
+@test eltype(AbstractDEA{FreeDisposal,VRS}) != (FreeDisposal,CRS)

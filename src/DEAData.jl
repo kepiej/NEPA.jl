@@ -59,11 +59,11 @@ end
 function Base.getindex(Data::DEAData, I)
   N,M = getiodim(Data)
   K = length(I)
-  X = Array(eltype(Data.X),K,N)
-  Y = Array(eltype(Data.Y),K,M)
+  X = Array(Float64,K,N)
+  Y = Array(Float64,K,M)
   if(!isempty(Data.gx))
-    gx = Array(eltype(Data.gx),K,N)
-    gy = Array(eltype(Data.gy),K,M)
+    gx = Array(Float64,K,N)
+    gy = Array(Float64,K,M)
     for i in eachindex(I)
       X[i,:],Y[i,:],gx[i,:],gy[i,:] = Data[I[i]]
     end

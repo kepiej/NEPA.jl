@@ -1,11 +1,14 @@
 abstract AbstractDataEnvelopment
 
 # Abstract DEA model
-abstract AbstractDEA <: AbstractArray{Any,1}
+abstract AbstractDEA{S<:AbstractDataEnvelopment,T<:RS} <: AbstractArray{Any,1}
 
 function getdata(A::AbstractDEA)
 	# Concrete types should overload this method to get array-like indexing features
 end
+
+# Return parametric types as a tuple
+Base.eltype{S,T}(::Type{AbstractDEA{S,T}}) = (S, T)
 
 Base.size(A::AbstractDEA) = size(getdata(A))
 Base.linearindexing(::Type{AbstractDEA}) = Base.LinearFast()

@@ -1,5 +1,5 @@
 # Implements the Luenberger productivity growth indicator
-immutable Luenberger{T<:Tuple{AbstractDataEnvelopment,RS}}
+immutable Luenberger{S<:AbstractDataEnvelopment,T<:RS}
   D0::DDF
   D1::DDF
   K::Int64
@@ -8,7 +8,7 @@ immutable Luenberger{T<:Tuple{AbstractDataEnvelopment,RS}}
     if(size(X0) != size(X1) || size(Y0) != size(Y1))
       error("The number of DMUs must be the same in both periods!")
     end
-    new(DDF{T}(X0,Y0,gx0,gy0),DDF{T}(X1,Y1,gx1,gy1),size(X0,1))
+    new(DDF{S,T}(X0,Y0,gx0,gy0),DDF{S,T}(X1,Y1,gx1,gy1),size(X0,1))
   end
 
   function Luenberger(DDF0::DDF,DDF1::DDF)
