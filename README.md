@@ -7,6 +7,7 @@ A toolbox for doing efficiency analysis and computing productivity change using 
 * Data Envelopment Analysis (DEA)
 * Free Disposal Hulls (FDH)
 * Luenberger's directional distance functions
+* Slacks-based measure (SBM) of Tone (2001)
 
 for the various returns to scale assumptions (VRS, CRS, NIRS and NDRS).
 

@@ -35,3 +35,18 @@ Data = DEAData(X,Y,X,Y,indexes = ind)
 @test eltype(AbstractDEA{FreeDisposal,VRS}) != (Convex,VRS)
 @test eltype(AbstractDEA{FreeDisposal,CRS}) == (FreeDisposal,CRS)
 @test eltype(AbstractDEA{FreeDisposal,VRS}) != (FreeDisposal,CRS)
+
+#Test SBM model using Tone(2001) example
+X = [4.0 3.0; 6.0 3.0; 8.0 1.0; 8.0 1.0; 2.0 4.0]
+Y = [2.0 3.0; 2.0 3.0; 6.0 2.0; 6.0 1.0; 1.0 4.0]
+
+D = SBM{CRS}(X,Y)
+sbmres = D()
+@test_approx_eq_eps geteff(sbmres) [0.798 0.568 1.0 0.667 1.0] 1e-3
+D = DEA_CRS(X,Y,true)
+deares = D()
+@test_approx_eq_eps geteff(deares) [0.9 0.833 1.0 1.0 1.0] 1e-3
+
+Base.show(deares[1])
+Base.show(sbmres)
+Base.show(deares)

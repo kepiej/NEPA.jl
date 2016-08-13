@@ -34,13 +34,13 @@ MapleEff = convert(Array{Float64},MapleEff)
 input = true
 
 D = FDH_VRS(X,Y,input)
-println(maximum(abs(D() - MapleEff[:,8])))
+println(maximum(abs(geteff(D()) - MapleEff[:,8])))
 D = FDH_CRS(X,Y,input)
-println(maximum(abs(D() - MapleEff[:,9])))
+println(maximum(abs(geteff(D()) - MapleEff[:,9])))
 D = FDH_NIRS(X,Y,input)
-println(maximum(abs(D() - MapleEff[:,10])))
+println(maximum(abs(geteff(D()) - MapleEff[:,10])))
 D = FDH_NDRS(X,Y,input)
-println(maximum(abs(D() - MapleEff[:,11])))
+println(maximum(abs(geteff(D()) - MapleEff[:,11])))
 
 #M = convert(Int,round(3*size(D,1)/4))
 #thetaM = orderm(D,M,100)
@@ -48,21 +48,21 @@ println(maximum(abs(D() - MapleEff[:,11])))
 
 #FIXME This is not correct! It should be equal to the FDH_VRS efficiency!
 D = DDF{FreeDisposal,VRS}(X,Y,X,zeros(size(Y)))
-println(maximum(abs((1 - D()) - MapleEff[:,8])))
+println(maximum(abs((1 - geteff(D())) - MapleEff[:,8])))
 
 D = DEA_VRS(X,Y,input)
-println(maximum(abs(D() - MapleEff[:,1])))
+println(maximum(abs(geteff(D()) - MapleEff[:,1])))
 D = DEA_CRS(X,Y,input)
-println(maximum(abs(D() - MapleEff[:,2])))
+println(maximum(abs(geteff(D()) - MapleEff[:,2])))
 D = DEA_NIRS(X,Y,input)
-println(maximum(abs(D() - MapleEff[:,3])))
+println(maximum(abs(geteff(D()) - MapleEff[:,3])))
 D = DEA_NDRS(X,Y,input)
-println(maximum(abs(D() - MapleEff[:,4])))
+println(maximum(abs(geteff(D()) - MapleEff[:,4])))
 #@time theta = D() #4.389059 seconds
 #@time theta = D() #0.123012 seconds
 
 D = DDF{Convex,VRS}(X,Y,X,zeros(size(Y)))
-println(maximum(abs((1 - D()) - MapleEff[:,1])))
+println(maximum(abs((1 - geteff(D())) - MapleEff[:,1])))
 
 # Test indexing of DDF object
 println(D[1])
@@ -71,7 +71,7 @@ println(X[1,:],Y[1,:],X[1,:],zeros(1,size(Y,2)))
 # Do order-m efficiency
 #M = convert(Int,round(0.9*size(D,1)))
 #thetaM = orderm(D,M,100)
-#println(thetaM - D())
+#println(thetaM - geteff(D()))
 
 #data = readdlm("./NEPA/data/GriffellTatjéLovell.txt")
 #X0 = data[:,1]

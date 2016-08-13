@@ -20,11 +20,11 @@ end
 
 function Base.call(A::AbstractDEA)
 	Data = getdata(A)
-	beta = Array(Float64,getnrdmu(Data))
+	res = Array(DEAResult,getnrdmu(Data))
 
 	@sync @parallel for k in eachindex(Data)
-		beta[k] = Base.call(A,Data[k]...)
+		res[k] = Base.call(A,Data[k]...)
 	end
 
-	return beta
+	return res
 end

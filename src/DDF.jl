@@ -43,13 +43,13 @@ function Base.call{T<:RS}(D::DDF{Convex,T},Xk::Array,Yk::Array,gxk::Array,gyk::A
   sol = linprog(f,A,[sense;RSsense],b,l,u)
 
   if sol.status == :Optimal
-    beta = sol.sol[1]
+		res = DEAResult(sol.sol[1],[],[],sol.sol[2:end])
   else
-    beta = -Inf
+		res = DEAResult(-Inf)
     println("Error: solution status $(sol.status)")
   end
 
-	return beta
+	return res
 end
 
 # Solve free disposal DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
@@ -67,5 +67,5 @@ function Base.call(D::DDF{FreeDisposal,VRS},Xk::Array,Yk::Array,gxk::Array,gyk::
     end
   end
 
-	return beta
+	return DEAResult(beta)
 end

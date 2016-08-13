@@ -19,13 +19,13 @@ end
 function Base.call(L::Luenberger)
   val = Array(Float64,L.K)
   for k=1:L.K
-    val[k] = -L.D0(L.D1[k]...) + L.D1(L.D0[k]...)
+    val[k] = -geteff(L.D0(L.D1[k]...)) + geteff(L.D1(L.D0[k]...))
   end
-  return (val + L.D0() - L.D1())./2
+  return (val + geteff(L.D0()) - geteff(L.D1()))./2
 end
 
 function TEI(L::Luenberger)
-  return L.D0() - L.D1()
+  return geteff(L.D0()) - geteff(L.D1())
 end
 
 function TC(L::Luenberger)
@@ -33,9 +33,9 @@ function TC(L::Luenberger)
   TC1 = Array(Float64,L.K)
   for k=1:L.K
       # Compute technical change (TC0) from period 0 to period 1 using observations at time 0
-      TC0[k] = L.D1(L.D0[k]...) - L.D0(L.D0[k]...)
+      TC0[k] = geteff(L.D1(L.D0[k]...)) - geteff(L.D0(L.D0[k]...))
       # Compute technical change (TC1) from period 0 to period 1 using observations at time 1
-      TC1[k] = L.D1(L.D1[k]...) - L.D0(L.D1[k]...)
+      TC1[k] = geteff(L.D1(L.D1[k]...)) - geteff(L.D0(L.D1[k]...))
   end
 
   # Technical change (TC) is an arithmetic average of TC0 and TC1

@@ -34,21 +34,21 @@ function Base.call{S<:AbstractDataEnvelopment,T<:RS}(H::HMB{S,T})
     X0,Y0 = getdata(H.Out0)[k]
     X1,Y1 = getdata(H.Out1)[k]
 
-    MO0[k] = H.Out0(X0,Y1)/H.Out0(X0,Y0)
-    MO1[k] = H.Out1(X1,Y1)/H.Out1(X1,Y0)
+    MO0[k] = geteff(H.Out0(X0,Y1))/geteff(H.Out0(X0,Y0))
+    MO1[k] = geteff(H.Out1(X1,Y1))/geteff(H.Out1(X1,Y0))
 
     X0,Y0 = getdata(H.In0)[k]
     X1,Y1 = getdata(H.In1)[k]
 
-    MI0[k] = H.In0(X0,Y0)/H.In0(X1,Y0)
-    MI1[k] = H.In1(X0,Y1)/H.In1(X1,Y1)
+    MI0[k] = geteff(H.In0(X0,Y0))/geteff(H.In0(X1,Y0))
+    MI1[k] = geteff(H.In1(X0,Y1))/geteff(H.In1(X1,Y1))
   end
   return sqrt((MO0./MI0).*(MO1./MI1))
 end
 
 # Technical efficiency change
 function TEI{S<:AbstractDataEnvelopment,T<:RS}(H::HMB{S,T})
-  return H.Out1()./H.Out0()
+  return geteff(H.Out1())./geteff(H.Out0())
 end
 
 # Technical change
@@ -57,12 +57,12 @@ function TC{S<:AbstractDataEnvelopment,T<:RS}(H::HMB{S,T})
   TC1 = Array(Float64,H.K)
   for k=1:H.K
     X0,Y0 = getdata(H.Out0)[k]
-    TC0[k] = H.Out1(X0,Y0)
+    TC0[k] = geteff(H.Out1(X0,Y0))
     X1,Y1 = getdata(H.Out1)[k]
-    TC1[k] = H.Out0(X1,Y1)
+    TC1[k] = geteff(H.Out0(X1,Y1))
   end
-  TC0 = H.Out0()./TC0
-  TC1 = TC1./H.Out1()
+  TC0 = geteff(H.Out0())./TC0
+  TC1 = TC1./geteff(H.Out1())
   return sqrt(TC0.*TC1)
 end
 

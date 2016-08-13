@@ -19,9 +19,24 @@ function getdata(DMU::DEA)
 end
 
 function Base.call(DMU::DEA,Xk::Array,Yk::Array)
-  return DMU.input ? (1 - DMU.D(Xk,Yk,Xk,zeros(size(Yk)))) : (1 + DMU.D(Xk,Yk,zeros(size(Xk)),Yk))
+  if DMU.input
+    res = DMU.D(Xk,Yk,Xk,zeros(size(Yk)))
+    res.eff = 1 - res.eff
+  else
+    res = DMU.D(Xk,Yk,zeros(size(Xk)),Yk)
+    res.eff = 1 + res.eff
+  end
+  return res
 end
 
 function Base.call(DMU::DEA)
-  return DMU.input ? (1 - DMU.D()) : (1 + DMU.D())
+  res = DMU.D()
+  for k in eachindex(res)
+    if DMU.input
+      res[k].eff = 1 - res[k].eff
+    else
+      res[k].eff = 1 + res[k].eff
+    end
+  end
+  return res
 end

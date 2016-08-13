@@ -12,7 +12,7 @@ function orderm{T<:AbstractDEA}(A::T,M::Int,B::Int)
   @sync @parallel for i=1:B
     setindexes!(Data,rand(1:K,M))
     for j in eachindex(Datacopy)
-      theta[j,i] = A(Datacopy[j]...)
+      theta[j,i] = geteff(A(Datacopy[j]...))
     end
   end
   setindexes!(Data,collect(1:K))
@@ -40,7 +40,7 @@ function orderm{T<:RS}(A::FDH{T},M::Int,B::Int)
     end
     @sync @parallel for i=1:B
       setindexes!(Data,rand(1:K,M))
-      theta[j,i] = A(Xk,Yk)
+      theta[j,i] = geteff(A(Xk,Yk))
     end
   end
   setindexes!(Data,collect(1:K))

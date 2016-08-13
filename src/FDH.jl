@@ -41,7 +41,7 @@ function Base.call(F::FDH{VRS},Xk::Array,Yk::Array)
       end
     end
   end
-  return theta
+  return DEAResult(theta)
 end
 
 # Solve FDH program under NDRS with (Xk,Yk) as evaluation point
@@ -70,7 +70,7 @@ function Base.call(F::FDH{NDRS},Xk::Array,Yk::Array)
       end
     end
   end
-  return theta
+  return DEAResult(theta)
 end
 
 # Solve FDH program under CRS with (Xk,Yk) as evaluation point
@@ -98,7 +98,7 @@ function Base.call(F::FDH{CRS},Xk::Array,Yk::Array)
       end
     end
   end
-  return theta
+  return DEAResult(theta)
 end
 
 # Solve FDH program under NIRS with (Xk,Yk) as evaluation point
@@ -127,5 +127,5 @@ function Base.call(F::FDH{NIRS},Xk::Array,Yk::Array)
       end
     end
   end
-  return theta
+  return DEAResult(theta)
 end
