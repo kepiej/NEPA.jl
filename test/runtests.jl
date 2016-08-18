@@ -48,6 +48,24 @@ D = DEA_CRS(X,Y,true)
 deares = D()
 @test_approx_eq_eps geteff(deares) [0.9 0.833 1.0 1.0 1.0] 1e-3
 
-Base.show(deares[1])
-Base.show(sbmres)
-Base.show(deares)
+#Base.show(deares[1])
+#Base.show(sbmres)
+#Base.show(deares)
+
+#Test DDF model using Cherchye et al. (2001) numerical example
+X = [3;6;4;6;5;8;12;14;18]
+Y = [4;5;6;7;8;9;11;13;14]
+
+DDFMcFadden = DDF{FreeDisposal,VRS}(X,Y,-X,Y)
+@test_approx_eq_eps geteff(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) 1.6 1e-3
+
+Ysens = zeros(9)
+Ysens[9,:] = 1
+DDFMcFadden = DDF{FreeDisposal,VRS}(X,Y+Ysens,-X,Y+Ysens)
+@test_approx_eq_eps geteff(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) 2.0 1e-3
+
+#FIXME For some reason incorrect results: it should be 9.5 but we find 1.8...
+Xsens = zeros(9)
+Xsens[9,:] = 1.2
+DDFMcFadden = DDF{FreeDisposal,VRS}(X-Xsens,Y,-X+Xsens,Y)
+#@test_approx_eq_eps geteff(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) 9.5 1e-3

@@ -55,17 +55,44 @@ end
 # Solve free disposal DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
 #FIXME Check that this is correct!
 function Base.call(D::DDF{FreeDisposal,VRS},Xk::Array,Yk::Array,gxk::Array,gyk::Array)
-  #TODO Implement for (gxk,gyk) < 0
-  yind = gyk .> 0.0
-  xind = gxk .> 0.0
-  beta = -Inf
-  for i in eachindex(D.Data)
+	gxk0 = map(isapprox,gxk,0.0.*ones(size(gxk)))
+	gyk0 = map(isapprox,gyk,0.0.*ones(size(gyk)))
+	if(any(gxk0) || any(gyk0))
+		Q = []
+		for i in eachindex(D.Data)
+			Xi,Yi,gxi,gyi = D.Data[i]
+			if(all(Yi[gyk0] .>= Yk[gyk0]) && all(Xi[gxk0] .<= Xk[gxk0]))
+				Q = [Q;i]
+			end
+		end
+	else
+		Q = D.Data
+	end
+
+  ypos = gyk .> 0.0
+  xpos = gxk .> 0.0
+	yneg = gyk .< 0.0
+	xneg = gxk .< 0.0
+  alpha = -Inf
+	for i in eachindex(Q)
     Xi,Yi,gxi,gyi = D.Data[i]
-    curmin = minimum([((Yi[yind]-Yk[yind])./gyk[yind]); ((Xk[xind]-Xi[xind])./gxk[xind])])
-    if(curmin > beta)
-      beta = curmin
+
+		if(any(xneg) || any(yneg))
+			gamma = maximum([((Yi[yneg]-Yk[yneg])./gyk[yneg]); ((Xk[xneg]-Xi[xneg])./gxk[xneg])])
+		else
+			gamma = 0.0
+		end
+
+		beta = minimum([((Yi[ypos]-Yk[ypos])./gyk[ypos]); ((Xk[xpos]-Xi[xpos])./gxk[xpos])])
+
+		if(beta < gamma)
+			beta = 0.0
+		end
+
+    if(beta > alpha)
+      alpha = beta
     end
   end
 
-	return DEAResult(beta)
+	return DEAResult(alpha)
 end

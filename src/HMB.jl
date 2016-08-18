@@ -25,7 +25,7 @@ end
 eltype{S,T}(::Type{HMB{S,T}}) = (S, T)
 
 # Compute the HMB index
-function Base.call{S<:AbstractDataEnvelopment,T<:RS}(H::HMB{S,T})
+function Base.call(H::HMB)
   MO0 = Array(Float64,H.K)
   MO1 = Array(Float64,H.K)
   MI0 = Array(Float64,H.K)
@@ -47,12 +47,12 @@ function Base.call{S<:AbstractDataEnvelopment,T<:RS}(H::HMB{S,T})
 end
 
 # Technical efficiency change
-function TEI{S<:AbstractDataEnvelopment,T<:RS}(H::HMB{S,T})
+function TEI(H::HMB)
   return geteff(H.Out1())./geteff(H.Out0())
 end
 
 # Technical change
-function TC{S<:AbstractDataEnvelopment,T<:RS}(H::HMB{S,T})
+function TC(H::HMB)
   TC0 = Array(Float64,H.K)
   TC1 = Array(Float64,H.K)
   for k=1:H.K
@@ -63,10 +63,10 @@ function TC{S<:AbstractDataEnvelopment,T<:RS}(H::HMB{S,T})
   end
   TC0 = geteff(H.Out0())./TC0
   TC1 = TC1./geteff(H.Out1())
-  return sqrt(TC0.*TC1)
+  return real(sqrt(complex(TC0.*TC1)))
 end
 
 # Scale efficiency change
-function SEC{S<:AbstractDataEnvelopment,T<:RS}(H::HMB{S,T})
+function SEC(H::HMB)
   return H()./(TC(H).*TEI(H))
 end
