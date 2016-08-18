@@ -60,5 +60,5 @@ function getsy(res::Array{DEAResult})
 end
 
 function Base.show(io::IO,res::DEAResult)
-  write(io,"eff = $(geteff(res)), sx = $(getsx(res)), sy = $(getsy(res))\n")
+  write(io,"eff = $(geteff(res)), sx = $(getsx(res)), sy = $(getsy(res))\n, peers = $(getpeers(res))")
 end

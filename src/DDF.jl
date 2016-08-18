@@ -43,7 +43,7 @@ function Base.call{T<:RS}(D::DDF{Convex,T},Xk::Array,Yk::Array,gxk::Array,gyk::A
   sol = linprog(f,A,[sense;RSsense],b,l,u)
 
   if sol.status == :Optimal
-		res = DEAResult(sol.sol[1],[],[],sol.sol[2:end])
+		res = DEAResult(sol.sol[1],sol.sol[1].*gxk,sol.sol[1].*gyk,sol.sol[2:end])
   else
 		res = DEAResult(-Inf)
     println("Error: solution status $(sol.status)")
@@ -52,7 +52,7 @@ function Base.call{T<:RS}(D::DDF{Convex,T},Xk::Array,Yk::Array,gxk::Array,gyk::A
 	return res
 end
 
-# Solve free disposal DDF program with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
+# Solve free disposal DDF program under VRS with (Xk,Yk) as evaluation point in the direction of (gxk,gyk)
 #FIXME Check that this is correct!
 function Base.call(D::DDF{FreeDisposal,VRS},Xk::Array,Yk::Array,gxk::Array,gyk::Array)
 	gxk0 = map(isapprox,gxk,0.0.*ones(size(gxk)))
@@ -74,6 +74,7 @@ function Base.call(D::DDF{FreeDisposal,VRS},Xk::Array,Yk::Array,gxk::Array,gyk::
 	yneg = gyk .< 0.0
 	xneg = gxk .< 0.0
   alpha = -Inf
+	alphapeer = 0
 	for i in eachindex(Q)
     Xi,Yi,gxi,gyi = D.Data[i]
 
@@ -91,8 +92,11 @@ function Base.call(D::DDF{FreeDisposal,VRS},Xk::Array,Yk::Array,gxk::Array,gyk::
 
     if(beta > alpha)
       alpha = beta
+			alphapeer = i
     end
   end
 
-	return DEAResult(alpha)
+	peers = zeros(getnrdmu(D.Data))
+	peers[alphapeer] = 1.0
+	return DEAResult(alpha,alpha.*gxk,alpha.*gyk,peers)
 end
