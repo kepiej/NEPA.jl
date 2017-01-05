@@ -75,26 +75,29 @@ function Base.call(D::DDF{FreeDisposal,VRS},Xk::Array,Yk::Array,gxk::Array,gyk::
 	xneg = gxk .< 0.0
   alpha = -Inf
 	alphapeer = 0
+	gamma = zeros(getnrdmu(D.Data))
+	beta = zeros(getnrdmu(D.Data))
+	alpha = zeros(getnrdmu(D.Data))
 	for i in eachindex(Q)
     Xi,Yi,gxi,gyi = D.Data[i]
 
 		if(any(xneg) || any(yneg))
-			gamma = maximum([((Yi[yneg]-Yk[yneg])./gyk[yneg]); ((Xk[xneg]-Xi[xneg])./gxk[xneg])])
+			gamma[i] = maximum([((Yi[yneg]-Yk[yneg])./gyk[yneg]); ((Xk[xneg]-Xi[xneg])./gxk[xneg])])
 		else
-			gamma = 0.0
+			gamma[i] = 0.0
 		end
 
-		beta = minimum([((Yi[ypos]-Yk[ypos])./gyk[ypos]); ((Xk[xpos]-Xi[xpos])./gxk[xpos])])
+		beta[i] = minimum([((Yi[ypos]-Yk[ypos])./gyk[ypos]); ((Xk[xpos]-Xi[xpos])./gxk[xpos])])
 
-		if(beta < gamma)
-			beta = 0.0
+		if(beta[i] < gamma[i])
+			alpha[i] = 0.0
+		else
+			alpha[i] = beta[i]
 		end
 
-    if(beta > alpha)
-      alpha = beta
-			alphapeer = i
-    end
   end
+	alphapeer = indmax(alpha)
+	alpha = maximum(alpha)
 
 	peers = zeros(getnrdmu(D.Data))
 	peers[alphapeer] = 1.0

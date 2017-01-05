@@ -53,15 +53,15 @@ deares = D()
 #Base.show(deares)
 
 #Test DDF model using Cherchye et al. (2001) numerical example
-X = [3;6;4;6;5;8;12;14;18]
-Y = [4;5;6;7;8;9;11;13;14]
+X = [3.0;6.0;4.0;6.0;5.0;8.0;12.0;14.0;18.0]
+Y = [4.0;5.0;6.0;7.0;8.0;9.0;11.0;13.0;14.0]
 
 DDFMcFadden = DDF{FreeDisposal,VRS}(X,Y,-X,Y)
 @test_approx_eq_eps geteff(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) 1.6 1e-3
 @test find(getpeers(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) .> 0.0) == [8] # peer H
 
 Ysens = zeros(9)
-Ysens[9,:] = 1
+Ysens[9,:] = 1.0
 DDFMcFadden = DDF{FreeDisposal,VRS}(X,Y+Ysens,-X,Y+Ysens)
 @test_approx_eq_eps geteff(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) 2.0 1e-3
 @test find(getpeers(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) .> 0.0) == [9] # peer I

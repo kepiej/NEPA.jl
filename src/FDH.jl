@@ -20,6 +20,7 @@ end
 # Solve FDH program under VRS with (Xk,Yk) as evaluation point
 function Base.call(F::FDH{VRS},Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
+  dompeer = NaN
   if(F.input) #Input-oriented
     theta = Inf
     domy = find(all(Y .>= Yk,2))
@@ -28,6 +29,7 @@ function Base.call(F::FDH{VRS},Xk::Array,Yk::Array)
       curmin = maximum(X[k,Ixk]./Xk[:,Ixk])
       if(curmin < theta)
         theta = curmin
+        dompeer = k
       end
     end
   else #Output-oriented
@@ -38,16 +40,18 @@ function Base.call(F::FDH{VRS},Xk::Array,Yk::Array)
       curmax = minimum(Y[k,Iyk]./Yk[:,Iyk])
       if(curmax > theta)
         theta = curmax
+        dompeer = k
       end
     end
   end
-  return DEAResult(theta)
+  return DEAResult(theta,[],[],[k == dompeer ? 1.0 : 0.0 for k=1:size(X,1)])
 end
 
 # Solve FDH program under NDRS with (Xk,Yk) as evaluation point
 function Base.call(F::FDH{NDRS},Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   K = size(X,1)
+  dompeer = NaN
   if(F.input) #Input-oriented
     theta = Inf
     for k=1:K
@@ -56,6 +60,7 @@ function Base.call(F::FDH{NDRS},Xk::Array,Yk::Array)
       curmin = max(maximum(Yk[:,Jyk]./Y[k,Jyk]),1.0)*maximum(X[k,Ixk]./Xk[:,Ixk])
       if(curmin < theta)
         theta = curmin
+        dompeer = k
       end
     end
   else #Output-oriented
@@ -67,16 +72,18 @@ function Base.call(F::FDH{NDRS},Xk::Array,Yk::Array)
       curmax = minimum(Y[k,Jyk]./Yk[:,Jyk])*minimum(Xk[:,Ixk]./X[k,Ixk])
       if(curmax > theta)
         theta = curmax
+        dompeer = k
       end
     end
   end
-  return DEAResult(theta)
+  return DEAResult(theta,[],[],[k == dompeer ? 1.0 : 0.0 for k=1:K])
 end
 
 # Solve FDH program under CRS with (Xk,Yk) as evaluation point
 function Base.call(F::FDH{CRS},Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   K = size(X,1)
+  dompeer = NaN
   if(F.input) #Input-oriented
     theta = Inf
     for k=1:K
@@ -85,6 +92,7 @@ function Base.call(F::FDH{CRS},Xk::Array,Yk::Array)
       curmin = maximum(Yk[:,Jyk]./Y[k,Jyk])*maximum(X[k,Ixk]./Xk[:,Ixk])
       if(curmin < theta)
         theta = curmin
+        dompeer = k
       end
     end
   else #Output-oriented
@@ -95,16 +103,18 @@ function Base.call(F::FDH{CRS},Xk::Array,Yk::Array)
       curmax = minimum(Y[k,Jyk]./Yk[:,Jyk])*minimum(Xk[:,Ixk]./X[k,Ixk])
       if(curmax > theta)
         theta = curmax
+        dompeer = k
       end
     end
   end
-  return DEAResult(theta)
+  return DEAResult(theta,[],[],[k == dompeer ? 1.0 : 0.0 for k=1:K])
 end
 
 # Solve FDH program under NIRS with (Xk,Yk) as evaluation point
 function Base.call(F::FDH{NIRS},Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   K = size(X,1)
+  dompeer = NaN
   if(F.input) #Input-oriented
     theta = Inf
     domy = find(all(Y .>= Yk,2))
@@ -114,6 +124,7 @@ function Base.call(F::FDH{NIRS},Xk::Array,Yk::Array)
       curmin = maximum(Yk[:,Jyk]./Y[k,Jyk])*maximum(X[k,Ixk]./Xk[:,Ixk])
       if(curmin < theta)
         theta = curmin
+        dompeer = k
       end
     end
   else #Output-oriented
@@ -124,8 +135,9 @@ function Base.call(F::FDH{NIRS},Xk::Array,Yk::Array)
       curmax = minimum(Y[k,Jyk]./Yk[:,Jyk])*min(minimum(Xk[:,Ixk]./X[k,Ixk]),1.0)
       if(curmax > theta)
         theta = curmax
+        dompeer = k
       end
     end
   end
-  return DEAResult(theta)
+  return DEAResult(theta,[],[],[k == dompeer ? 1.0 : 0.0 for k=1:K])
 end
