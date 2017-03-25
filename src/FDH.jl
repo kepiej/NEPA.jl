@@ -21,10 +21,10 @@ end
 function Base.call(F::FDH{VRS},Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   dompeer = NaN
+  dom = find(all(Y .>= Yk,2) & all(X .<= Xk,2))
   if(F.input) #Input-oriented
     theta = Inf
-    domy = find(all(Y .>= Yk,2))
-    for k in domy
+    for k in dom
       Ixk = X[k,:] .> 0.0
       curmin = maximum(X[k,Ixk]./Xk[:,Ixk])
       if(curmin < theta)
@@ -34,8 +34,7 @@ function Base.call(F::FDH{VRS},Xk::Array,Yk::Array)
     end
   else #Output-oriented
     theta = -Inf
-    domx = find(all(X .<= Xk,2))
-    for k in domx
+    for k in dom
       Iyk = Y[k,:] .> 0.0
       curmax = minimum(Y[k,Iyk]./Yk[:,Iyk])
       if(curmax > theta)
@@ -52,9 +51,10 @@ function Base.call(F::FDH{NDRS},Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   K = size(X,1)
   dompeer = NaN
+  domx = find(all(X .<= Xk,2))
   if(F.input) #Input-oriented
     theta = Inf
-    for k=1:K
+    for k in domx
       Ixk = X[k,:] .> 0.0
       Jyk = Y[k,:] .> 0.0
       curmin = max(maximum(Yk[:,Jyk]./Y[k,Jyk]),1.0)*maximum(X[k,Ixk]./Xk[:,Ixk])
@@ -65,7 +65,6 @@ function Base.call(F::FDH{NDRS},Xk::Array,Yk::Array)
     end
   else #Output-oriented
     theta = -Inf
-    domx = find(all(X .<= Xk,2))
     for k in domx
       Ixk = X[k,:] .> 0.0
       Jyk = Y[k,:] .> 0.0
@@ -84,9 +83,10 @@ function Base.call(F::FDH{CRS},Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   K = size(X,1)
   dompeer = NaN
+  dom = find(maximum(Yk./Y,2) .<= minimum(Xk./X,2))
   if(F.input) #Input-oriented
     theta = Inf
-    for k=1:K
+    for k in dom
       Ixk = X[k,:] .> 0.0
       Jyk = Y[k,:] .> 0.0
       curmin = maximum(Yk[:,Jyk]./Y[k,Jyk])*maximum(X[k,Ixk]./Xk[:,Ixk])
@@ -97,7 +97,7 @@ function Base.call(F::FDH{CRS},Xk::Array,Yk::Array)
     end
   else #Output-oriented
     theta = -Inf
-    for k=1:K
+    for k in dom
       Ixk = X[k,:] .> 0.0
       Jyk = Y[k,:] .> 0.0
       curmax = minimum(Y[k,Jyk]./Yk[:,Jyk])*minimum(Xk[:,Ixk]./X[k,Ixk])
@@ -115,9 +115,9 @@ function Base.call(F::FDH{NIRS},Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   K = size(X,1)
   dompeer = NaN
+  domy = find(all(Y .>= Yk,2))
   if(F.input) #Input-oriented
     theta = Inf
-    domy = find(all(Y .>= Yk,2))
     for k in domy
       Ixk = X[k,:] .> 0.0
       Jyk = Y[k,:] .> 0.0
@@ -129,7 +129,7 @@ function Base.call(F::FDH{NIRS},Xk::Array,Yk::Array)
     end
   else #Output-oriented
     theta = -Inf
-    for k=1:K
+    for k in domy
       Ixk = X[k,:] .> 0.0
       Jyk = Y[k,:] .> 0.0
       curmax = minimum(Y[k,Jyk]./Yk[:,Jyk])*min(minimum(Xk[:,Ixk]./X[k,Ixk]),1.0)

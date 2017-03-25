@@ -46,11 +46,15 @@ println(maximum(abs(geteff(D()) - MapleEff[:,11])))
 #thetaM = orderm(D,M,100)
 #println(thetaM - D())
 
-#FIXME This is not correct! It should be equal to the FDH_VRS efficiency!
+# This should be equal to the FDH_VRS efficiency!
 D = DDF{FreeDisposal,VRS}(X,Y,X,zeros(size(Y)))
 println(maximum(abs((1 - geteff(D())) - MapleEff[:,8])))
+#println(hcat((1 - geteff(D())), MapleEff[:,8]))
 
-#println("$((1 - geteff(D()))), $(MapleEff[:,8])")
+# Hyperbolic equals square root of input oriented FDH under CRS
+GDR = Hyperbolic{FreeDisposal,CRS}(X,Y)
+D = FDH_CRS(X,Y,input)
+println(maximum(abs(geteff(GDR()) - sqrt(geteff(D())))))
 
 D = DEA_VRS(X,Y,input)
 println(maximum(abs(geteff(D()) - MapleEff[:,1])))

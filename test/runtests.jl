@@ -72,3 +72,6 @@ Xsens[9,:] = 1.2
 DDFMcFadden = DDF{FreeDisposal,VRS}(X-Xsens,Y,-X+Xsens,Y)
 #@test_approx_eq_eps geteff(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) 9.5 1e-3
 @test find(getpeers(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) .> 0.0) == [9] # peer I
+
+Graph = Hyperbolic{FreeDisposal,VRS}(X,Y)
+println(geteff(Graph()))

@@ -17,6 +17,7 @@ export WACM
 export Luenberger,TEI,TC
 export HMB,TEI,TC,SEC
 export orderm
+export Hyperbolic
 
 # Source files
 include("RTS.jl")
@@ -31,5 +32,6 @@ include("WACM.jl")
 include("Luenberger.jl")
 include("HMB.jl")
 include("OrderM.jl")
+include("Hyperbolic.jl")
 
 end
