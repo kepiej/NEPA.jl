@@ -114,7 +114,7 @@ function Base.call{T<:RS}(D::DDF{FreeDisposal,T},Xk::Array,Yk::Array,gxk::Array,
 	#Simar and Vanhems(2012) trick using transformed dataset and computing hyperbolic distance function on the transformed data
 	#Note: This assumes gxk,gyk >= 0!
 	DGR = Hyperbolic{FreeDisposal,T}(exp(hcat(X[:,!gxk0]./gxk[:,!gxk0],X[:,gxk0])),exp(hcat(Y[:,!gyk0]./gyk[:,!gyk0],Y[:,gyk0])))
-	DGRres = DGR(exp(hcat(Xk[:,!gxk0]./gxk[:,!gxk0],Xk[:,gxk0])),exp(hcat(Yk[:,!gyk0]./gyk[:,!gyk0],Yk[:,gyk0])))
+	DGRres = DGR(hcat(exp(Xk[:,!gxk0]./gxk[:,!gxk0]),Xk[:,gxk0]),hcat(exp(Yk[:,!gyk0]./gyk[:,!gyk0]),Yk[:,gyk0]))
 
 	# xpos = gxk .> 0.0
 	# ypos = gyk .> 0.0
