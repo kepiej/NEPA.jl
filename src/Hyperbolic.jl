@@ -80,3 +80,14 @@ function (H::Hyperbolic{FreeDisposal,VRS})(Xk::Array,Yk::Array)
   end
   return DEAResult(gamma,[],[],[k == dompeer ? 1.0 : 0.0 for k=1:size(X,1)])
 end
+
+function (H::Hyperbolic{S,T})() where {S<:AbstractDataEnvelopment,T<:RS}
+  	Data = getdata(H)
+  	res = Array{DEAResult}(getnrdmu(Data))
+
+  	@sync @parallel for k in eachindex(Data)
+  		res[k] = H(Data[k]...)
+  	end
+
+  	return res
+end
