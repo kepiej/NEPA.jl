@@ -9,7 +9,7 @@ immutable DEA{T<:RS} <: AbstractDEA{Convex,T}
   D::DDF
   input::Bool
 
-  function DEA(X::Array,Y::Array,input::Bool)
+  function DEA{T}(X::Array,Y::Array,input::Bool) where T<:RS
     input ? new(DDF{Convex,T}(X,Y,X,zeros(size(Y))),input) : new(DDF{Convex,T}(X,Y,zeros(size(X)),Y),input)
   end
 end
@@ -18,7 +18,7 @@ function getdata(DMU::DEA)
 	return getdata(DMU.D)
 end
 
-function Base.call(DMU::DEA,Xk::Array,Yk::Array)
+function (DMU::DEA)(Xk::Array,Yk::Array)
   if DMU.input
     res = DMU.D(Xk,Yk,Xk,zeros(size(Yk)))
     res.eff = 1 - res.eff
@@ -31,7 +31,7 @@ function Base.call(DMU::DEA,Xk::Array,Yk::Array)
   return res
 end
 
-function Base.call(DMU::DEA)
+function (DMU::DEA)()
   res = DMU.D()
   for k in eachindex(res)
     if DMU.input

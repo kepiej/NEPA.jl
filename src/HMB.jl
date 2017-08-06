@@ -6,7 +6,7 @@ immutable HMB{S<:AbstractDataEnvelopment,T<:RS}
   Out1::Union{FDH,DEA}
   K::Int64
 
-  function HMB(X0::Array,Y0::Array,X1::Array,Y1::Array)
+  function HMB{S,T}(X0::Array,Y0::Array,X1::Array,Y1::Array) where {S<:AbstractDataEnvelopment,T<:RS}
     if(size(X0) != size(X1) || size(Y0) != size(Y1))
       error("The number of DMUs must be the same in both periods!")
     end
@@ -25,11 +25,11 @@ end
 eltype{S,T}(::Type{HMB{S,T}}) = (S, T)
 
 # Compute the HMB index
-function Base.call(H::HMB)
-  MO0 = Array(Float64,H.K)
-  MO1 = Array(Float64,H.K)
-  MI0 = Array(Float64,H.K)
-  MI1 = Array(Float64,H.K)
+function (H::HMB)()
+  MO0 = Array{Float64}(H.K)
+  MO1 = Array{Float64}(H.K)
+  MI0 = Array{Float64}(H.K)
+  MI1 = Array{Float64}(H.K)
   for k=1:H.K
     X0,Y0 = getdata(H.Out0)[k]
     X1,Y1 = getdata(H.Out1)[k]
@@ -53,8 +53,8 @@ end
 
 # Technical change
 function TC(H::HMB)
-  TC0 = Array(Float64,H.K)
-  TC1 = Array(Float64,H.K)
+  TC0 = Array{Float64}(H.K)
+  TC1 = Array{Float64}(H.K)
   for k=1:H.K
     X0,Y0 = getdata(H.Out0)[k]
     TC0[k] = geteff(H.Out1(X0,Y0))

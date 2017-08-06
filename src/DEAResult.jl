@@ -16,7 +16,7 @@ function geteff(res::DEAResult)
 end
 
 function geteff(res::Array{DEAResult})
-  eff = Array(Float64,length(res))
+  eff = Array{Float64}(length(res))
   for k in eachindex(res)
     eff[k] = geteff(res[k])
   end
@@ -28,7 +28,7 @@ function getpeers(res::DEAResult)
 end
 
 function getpeers(res::Array{DEAResult})
-  peers = Array(Float64,length(res),length(res))
+  peers = Array{Float64}(length(res),length(res))
   for k in eachindex(res)
     peers[k,:] = getpeers(res[k])
   end
@@ -40,7 +40,7 @@ function getsx(res::DEAResult)
 end
 
 function getsx(res::Array{DEAResult})
-  sx = Array(Float64,length(res),length(getsx(res[1])))
+  sx = Array{Float64}(length(res),length(getsx(res[1])))
   for k in eachindex(res)
     sx[k,:] = getsx(res[k])
   end
@@ -52,7 +52,7 @@ function getsy(res::DEAResult)
 end
 
 function getsy(res::Array{DEAResult})
-  sy = Array(Float64,length(res),length(getsy(res[1])))
+  sy = Array{Float64}(length(res),length(getsy(res[1])))
   for k in eachindex(res)
     sy[k,:] = getsy(res[k])
   end

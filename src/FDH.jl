@@ -8,7 +8,7 @@ immutable FDH{T<:RS} <: AbstractDEA{FreeDisposal,T}
   Data::DEAData
   input::Bool
 
-  function FDH(X::Array,Y::Array,input::Bool)
+  function FDH{T}(X::Array,Y::Array,input::Bool) where T<:RS
     new(DEAData(X,Y),input)
   end
 end
@@ -18,7 +18,7 @@ function getdata(F::FDH)
 end
 
 # Solve FDH program under VRS with (Xk,Yk) as evaluation point
-function Base.call(F::FDH{VRS},Xk::Array,Yk::Array)
+function (F::FDH{VRS})(Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   dompeer = NaN
   dom = find(all(Y .>= Yk,2) & all(X .<= Xk,2))
@@ -47,7 +47,7 @@ function Base.call(F::FDH{VRS},Xk::Array,Yk::Array)
 end
 
 # Solve FDH program under NDRS with (Xk,Yk) as evaluation point
-function Base.call(F::FDH{NDRS},Xk::Array,Yk::Array)
+function (F::FDH{NDRS})(Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   K = size(X,1)
   dompeer = NaN
@@ -79,7 +79,7 @@ function Base.call(F::FDH{NDRS},Xk::Array,Yk::Array)
 end
 
 # Solve FDH program under CRS with (Xk,Yk) as evaluation point
-function Base.call(F::FDH{CRS},Xk::Array,Yk::Array)
+function (F::FDH{CRS})(Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   K = size(X,1)
   dompeer = NaN
@@ -111,7 +111,7 @@ function Base.call(F::FDH{CRS},Xk::Array,Yk::Array)
 end
 
 # Solve FDH program under NIRS with (Xk,Yk) as evaluation point
-function Base.call(F::FDH{NIRS},Xk::Array,Yk::Array)
+function (F::FDH{NIRS})(Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   K = size(X,1)
   dompeer = NaN
@@ -140,4 +140,15 @@ function Base.call(F::FDH{NIRS},Xk::Array,Yk::Array)
     end
   end
   return DEAResult(theta,[],[],[k == dompeer ? 1.0 : 0.0 for k=1:K])
+end
+
+function (F::FDH{T})() where T<:RS
+  	Data = getdata(F)
+  	res = Array{DEAResult}(getnrdmu(Data))
+
+  	@sync @parallel for k in eachindex(Data)
+  		res[k] = DMU(Data[k]...)
+  	end
+
+  	return res
 end

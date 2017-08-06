@@ -5,7 +5,6 @@ push!(LOAD_PATH, "$(homedir())/Documents/GitHub")
 
 using NEPA
 using Base.Test
-using Clp
 
 # Test DEAData.jl
 X = [1 2 3;4 5 6; 7 8 9]
@@ -43,10 +42,10 @@ Y = [2.0 3.0; 2.0 3.0; 6.0 2.0; 6.0 1.0; 1.0 4.0]
 
 D = SBM{CRS}(X,Y)
 sbmres = D()
-@test_approx_eq_eps geteff(sbmres) [0.798 0.568 1.0 0.667 1.0] 1e-3
+@test geteff(sbmres) ≈ [0.798 0.568 1.0 0.667 1.0]' atol=1e-3
 D = DEA_CRS(X,Y,true)
 deares = D()
-@test_approx_eq_eps geteff(deares) [0.9 0.833 1.0 1.0 1.0] 1e-3
+@test geteff(deares) ≈ [0.9 0.833 1.0 1.0 1.0]' atol=1e-3
 
 #Base.show(deares[1])
 #Base.show(sbmres)
@@ -57,7 +56,7 @@ X = [3.0;6.0;4.0;6.0;5.0;8.0;12.0;14.0;18.0]
 Y = [4.0;5.0;6.0;7.0;8.0;9.0;11.0;13.0;14.0]
 
 DDFMcFadden = DDF{FreeDisposal,VRS}(X,Y,-X,Y)
-@test_approx_eq_eps geteff(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) 1.6 1e-3
+@test geteff(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) ≈ 1.6 atol=1e-3
 @test find(getpeers(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) .> 0.0) == [8] # peer H
 
 Ysens = zeros(9)
@@ -70,7 +69,7 @@ DDFMcFadden = DDF{FreeDisposal,VRS}(X,Y+Ysens,-X,Y+Ysens)
 Xsens = zeros(9)
 Xsens[9,:] = 1.2
 DDFMcFadden = DDF{FreeDisposal,VRS}(X-Xsens,Y,-X+Xsens,Y)
-#@test_approx_eq_eps geteff(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) 9.5 1e-3
+@test geteff(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) ≈ 9.5 atol=1e-3
 @test find(getpeers(DDFMcFadden(X[2,:],Y[2,:],-X[2,:],Y[2,:])) .> 0.0) == [9] # peer I
 
 Graph = Hyperbolic{FreeDisposal,VRS}(X,Y)

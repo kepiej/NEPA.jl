@@ -3,6 +3,7 @@ module NEPA
 # Nonparametric Efficiency and Productivity Analysis (NEPA)
 
 using MathProgBase
+using Clp
 
 # Export functions and types
 export RS, CRS, VRS, NIRS, NDRS

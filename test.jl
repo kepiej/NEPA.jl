@@ -3,16 +3,21 @@ cd("$(homedir())/Documents/GitHub")
 # Push Documents/GitHub on the search path
 push!(LOAD_PATH, "$(homedir())/Documents/GitHub")
 
-using ExcelReaders
+using FileIO, ExcelFiles, DataFrames
+#using ExcelReaders
 #using MAT
 using NEPA
 
 #mat = matread("C:/Users/u0093191/Documents/MATLAB/imputeLCM.mat")
 #println(mat)
 
-X = readxl("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","Data!F4:H195")
-W = readxl("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","Data!J4:L195")
-Y = readxl("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","Data!E4:E195")
+X = DataFrame(load("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","Data!F4:H195"))
+W = DataFrame(load("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","Data!J4:L195"))
+Y = DataFrame(load("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","Data!E4:E195"))
+
+#X = readxl("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","Data!F4:H195")
+#W = readxl("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","Data!J4:L195")
+#Y = readxl("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","Data!E4:E195")
 
 # Convert DataFrame or DataArray to Array so that the  function WACM doesn't crash
 X = convert(Array{Float64},X)
@@ -20,7 +25,8 @@ W = convert(Array{Float64},W)
 Y = convert(Array{Float64},Y)
 
 # Input-oriented efficiencies computed using Maple. We use these to check our computed results
-MapleEff = readxl("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","MapleEfficiencies!B2:O193")
+#MapleEff = readxl("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","MapleEfficiencies!B2:O193")
+MapleEff = DataFrame(load("C:/Users/u0093191/Documents/MATLAB/WACM/Atkinson-RSanalyis-11May2011.xls","MapleEfficiencies!B2:O193"))
 MapleEff = convert(Array{Float64},MapleEff)
 
 #eff = WACM(W,X,Y)

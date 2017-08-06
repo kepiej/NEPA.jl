@@ -1,5 +1,5 @@
 # We define several Returns to Scale (RS) types. The RS constraint used in DDF depends on these RTS type
-abstract RS
+abstract type RS end
 
 type CRS <: RS
 end

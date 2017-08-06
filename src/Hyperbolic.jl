@@ -1,7 +1,7 @@
 immutable Hyperbolic{S<:AbstractDataEnvelopment,T<:RS} <: AbstractDEA{S,T}
   Data::DEAData
 
-  function Hyperbolic(X,Y)
+  function Hyperbolic{S,T}(X,Y) where {S<:AbstractDataEnvelopment,T<:RS}
     new(DEAData(X,Y))
   end
 end
@@ -11,7 +11,7 @@ function getdata(DMU::Hyperbolic)
 end
 
 #Solve hyperbolic distance function under CRS with (Xk,Yk) as evaluation point
-function Base.call(H::Hyperbolic{FreeDisposal,CRS},Xk::Array,Yk::Array)
+function (H::Hyperbolic{FreeDisposal,CRS})(Xk::Array,Yk::Array)
   X,Y = getdata(H)[1:end]
   K = size(X,1)
   dompeer = NaN
@@ -29,8 +29,9 @@ function Base.call(H::Hyperbolic{FreeDisposal,CRS},Xk::Array,Yk::Array)
   return DEAResult(gamma,[],[],[k == dompeer ? 1.0 : 0.0 for k=1:K])
 end
 
+#T::Union{NIRS,NDRS}??
 #Solve hyperbolic distance function under NIRS/NDRS with (Xk,Yk) as evaluation point
-function Base.call{T<:RS}(H::Hyperbolic{FreeDisposal,T},Xk::Array,Yk::Array)
+function (H::Hyperbolic{FreeDisposal,T}){T<:RS}(Xk::Array,Yk::Array)
   X,Y = getdata(H)[1:end]
   K = size(X,1)
   gamma = Inf
@@ -62,10 +63,10 @@ function Base.call{T<:RS}(H::Hyperbolic{FreeDisposal,T},Xk::Array,Yk::Array)
 end
 
 #Solve hyperbolic distance function under VRS with (Xk,Yk) as evaluation point
-function Base.call(H::Hyperbolic{FreeDisposal,VRS},Xk::Array,Yk::Array)
+function (H::Hyperbolic{FreeDisposal,VRS})(Xk::Array,Yk::Array)
   X,Y = getdata(H)[1:end]
 
-  dom = find(all(Y .>= Yk,2) & all(X .<= Xk,2))
+  dom = find(all(Y .>= Yk,2) .& all(X .<= Xk,2))
   gamma = Inf
   dompeer = NaN
   for k in dom

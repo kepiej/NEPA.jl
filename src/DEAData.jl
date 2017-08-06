@@ -45,7 +45,7 @@ function setindexes!(Data::DEAData, newindexes::Vector{Int})
 end
 
 Base.size(Data::DEAData) = (length(Data.indexes),)
-Base.linearindexing(::Type{DEAData}) = Base.LinearFast()
+Base.IndexStyle(::Type{DEAData}) = IndexLinear()
 
 function Base.getindex(Data::DEAData,i::Int)
   1 <= i <= size(Data,1) || throw(BoundsError(Data, i))
@@ -59,11 +59,11 @@ end
 function Base.getindex(Data::DEAData, I)
   N,M = getiodim(Data)
   K = length(I)
-  X = Array(Float64,K,N)
-  Y = Array(Float64,K,M)
+  X = Array{Float64}(K,N)
+  Y = Array{Float64}(K,M)
   if(!isempty(Data.gx))
-    gx = Array(Float64,K,N)
-    gy = Array(Float64,K,M)
+    gx = Array{Float64}(K,N)
+    gy = Array{Float64}(K,M)
     for i in eachindex(I)
       X[i,:],Y[i,:],gx[i,:],gy[i,:] = Data[I[i]]
     end
