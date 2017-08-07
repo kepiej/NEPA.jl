@@ -3,5 +3,8 @@ julia:
   - 0.6
 notifications:
   email: false
+script:
+- if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+- julia -e 'Pkg.clone(pwd()); Pkg.build("NEPA"); Pkg.test("NEPA"; coverage=true)'
 after_success:
 - julia -e 'cd(Pkg.dir("NEPA")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
