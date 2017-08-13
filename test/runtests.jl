@@ -51,6 +51,13 @@ deares = D()
 #Base.show(sbmres)
 #Base.show(deares)
 
+Dout = DEA_CRS(X,Y,false)
+@test geteff(Dout()) ≈ 1./geteff(deares) atol=1e-3
+
+H = Hyperbolic{FreeDisposal,CRS}(X,Y)
+F = FDH_CRS(X,Y,false)
+@test geteff(H()) ≈ 1./geteff(F()) atol=1e-3
+
 #Test DDF model using Cherchye et al. (2001) numerical example
 X = [3.0;6.0;4.0;6.0;5.0;8.0;12.0;14.0;18.0]
 Y = [4.0;5.0;6.0;7.0;8.0;9.0;11.0;13.0;14.0]

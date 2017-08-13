@@ -25,8 +25,8 @@ function (F::FDH{VRS})(Xk::Array,Yk::Array)
   if(F.input) #Input-oriented
     theta = Inf
     for k in dom
-      Ixk = X[k,:] .> 0.0
-      curmin = maximum(X[k,Ixk]./Xk[:,Ixk])
+      Ixk = find(X[k,:] .> 0.0)
+      curmin = maximum(X[k,Ixk]./Xk[Ixk])
       if(curmin < theta)
         theta = curmin
         dompeer = k
@@ -35,8 +35,8 @@ function (F::FDH{VRS})(Xk::Array,Yk::Array)
   else #Output-oriented
     theta = -Inf
     for k in dom
-      Iyk = Y[k,:] .> 0.0
-      curmax = minimum(Y[k,Iyk]./Yk[:,Iyk])
+      Iyk = find(Y[k,:] .> 0.0)
+      curmax = minimum(Y[k,Iyk]./Yk[Iyk])
       if(curmax > theta)
         theta = curmax
         dompeer = k
@@ -55,9 +55,9 @@ function (F::FDH{NDRS})(Xk::Array,Yk::Array)
   if(F.input) #Input-oriented
     theta = Inf
     for k in domx
-      Ixk = X[k,:] .> 0.0
-      Jyk = Y[k,:] .> 0.0
-      curmin = max(maximum(Yk[:,Jyk]./Y[k,Jyk]),1.0)*maximum(X[k,Ixk]./Xk[:,Ixk])
+      Ixk = find(X[k,:] .> 0.0)
+      Jyk = find(Y[k,:] .> 0.0)
+      curmin = max(maximum(Yk[Jyk]./Y[k,Jyk]),1.0)*maximum(X[k,Ixk]./Xk[Ixk])
       if(curmin < theta)
         theta = curmin
         dompeer = k
@@ -66,9 +66,9 @@ function (F::FDH{NDRS})(Xk::Array,Yk::Array)
   else #Output-oriented
     theta = -Inf
     for k in domx
-      Ixk = X[k,:] .> 0.0
-      Jyk = Y[k,:] .> 0.0
-      curmax = minimum(Y[k,Jyk]./Yk[:,Jyk])*minimum(Xk[:,Ixk]./X[k,Ixk])
+      Ixk = find(X[k,:] .> 0.0)
+      Jyk = find(Y[k,:] .> 0.0)
+      curmax = minimum(Y[k,Jyk]./Yk[Jyk])*minimum(Xk[Ixk]./X[k,Ixk])
       if(curmax > theta)
         theta = curmax
         dompeer = k
@@ -83,13 +83,13 @@ function (F::FDH{CRS})(Xk::Array,Yk::Array)
   X,Y = getdata(F)[1:end]
   K = size(X,1)
   dompeer = NaN
-  dom = find(maximum(Yk./Y,2) .<= minimum(Xk./X,2))
+  dom = find(maximum(reshape(Yk,1,:)./Y,2) .<= minimum(reshape(Xk,1,:)./X,2))
   if(F.input) #Input-oriented
     theta = Inf
     for k in dom
-      Ixk = X[k,:] .> 0.0
-      Jyk = Y[k,:] .> 0.0
-      curmin = maximum(Yk[:,Jyk]./Y[k,Jyk])*maximum(X[k,Ixk]./Xk[:,Ixk])
+      Ixk = find(X[k,:] .> 0.0)
+      Jyk = find(Y[k,:] .> 0.0)
+      curmin = maximum(Yk[Jyk]./Y[k,Jyk])*maximum(X[k,Ixk]./Xk[Ixk])
       if(curmin < theta)
         theta = curmin
         dompeer = k
@@ -98,9 +98,9 @@ function (F::FDH{CRS})(Xk::Array,Yk::Array)
   else #Output-oriented
     theta = -Inf
     for k in dom
-      Ixk = X[k,:] .> 0.0
-      Jyk = Y[k,:] .> 0.0
-      curmax = minimum(Y[k,Jyk]./Yk[:,Jyk])*minimum(Xk[:,Ixk]./X[k,Ixk])
+      Ixk = find(X[k,:] .> 0.0)
+      Jyk = find(Y[k,:] .> 0.0)
+      curmax = minimum(Y[k,Jyk]./Yk[Jyk])*minimum(Xk[Ixk]./X[k,Ixk])
       if(curmax > theta)
         theta = curmax
         dompeer = k
@@ -147,7 +147,7 @@ function (F::FDH{T})() where T<:RS
   	res = Array{DEAResult}(getnrdmu(Data))
 
   	@sync @parallel for k in eachindex(Data)
-  		res[k] = DMU(Data[k]...)
+  		res[k] = F(Data[k]...)
   	end
 
   	return res
