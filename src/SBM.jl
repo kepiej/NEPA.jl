@@ -12,10 +12,10 @@ end
 
 function (DMU::SBM{T})(Xk::Array,Yk::Array; sx::Array = [],sy::Array = [],lambda::Array = []) where T<:RS
   K = getnrdmu(DMU.Data)
-	N,M = getiodim(DMU.Data)
+  N,M = getiodim(DMU.Data)
 
-	# Set the appropriate RTS constraint depending on T
-	RSA,RSb,RSsense = RSconstraint(K,T())
+  # Set the appropriate RTS constraint depending on T
+  RSA,RSb,RSsense = RSconstraint(K,T())
 
   f = zeros(K+1+N+M)
   f[1] = 1
@@ -27,7 +27,7 @@ function (DMU::SBM{T})(Xk::Array,Yk::Array; sx::Array = [],sy::Array = [],lambda
   sense = Array{Char}(N+M+1)
   sense[1:N+M+1] = '='
 
-	X,Y = DMU.Data[1:end]
+  X,Y = DMU[1:end]
 
   A = [reshape(Xk',:,1) -X' -eye(N) zeros(N,M); reshape(Yk',:,1) -Y' zeros(M,N) eye(M); 1 zeros(1,K+N) reshape(1./(M.*Yk),1,:); RSA zeros(1,N+M)]
   b = [zeros(N); zeros(M); 1; RSb]

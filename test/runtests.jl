@@ -41,6 +41,8 @@ X = [4.0 3.0; 6.0 3.0; 8.0 1.0; 8.0 1.0; 2.0 4.0]
 Y = [2.0 3.0; 2.0 3.0; 6.0 2.0; 6.0 1.0; 1.0 4.0]
 
 D = SBM{CRS}(X,Y)
+@test D[[1,2,5]] == (X[[1,2,5],:],Y[[1,2,5],:])
+@test_throws BoundsError D[[3,6]]
 sbmres = D()
 @test geteff(sbmres) ≈ [0.798 0.568 1.0 0.667 1.0]' atol=1e-3
 D = DEA_CRS(X,Y,true)

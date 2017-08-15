@@ -25,15 +25,15 @@ function (D::DDF{Convex,T})(Xk::Array,Yk::Array,gxk::Array,gyk::Array) where T<:
 	# Set the appropriate RTS constraint depending on T
 	RSA,RSb,RSsense = RSconstraint(K,T())
 
-  f = zeros(K+1)
-  f[1] = -1
-  l = [-Inf;zeros(K)]
-  u = [Inf for i=1:K+1]
+  	f = zeros(K+1)
+  	f[1] = -1
+  	l = [-Inf;zeros(K)]
+  	u = [Inf for i=1:K+1]
 
-  sense = Array{Char}(N+M)
-  sense[1:N+M] = '>'
+  	sense = Array{Char}(N+M)
+  	sense[1:N+M] = '>'
 
-	X,Y,gx,gy = D.Data[1:end]
+	X,Y,gx,gy = D[1:end]
 
 	A = [reshape(-gxk',:,1) -X'; reshape(-gyk',:,1) Y'; RSA]
 	b = [-Xk; Yk; RSb]
@@ -60,20 +60,20 @@ function (D::DDF{FreeDisposal,VRS})(Xk::Array,Yk::Array,gxk::Array,gyk::Array)
 	if(any(gxk0) || any(gyk0))
 		Q = []
 		for i in eachindex(D.Data)
-			Xi,Yi,gxi,gyi = D.Data[i]
+			Xi,Yi,gxi,gyi = D[i]
 			if(all(Yi[gyk0] .>= Yk[gyk0]) && all(Xi[gxk0] .<= Xk[gxk0]))
 				Q = [Q;i]
 			end
 		end
 	else
-		Q = D.Data
+		Q = getdata(D)
 	end
 
-  ypos = gyk .> 0.0
-  xpos = gxk .> 0.0
+  	ypos = gyk .> 0.0
+  	xpos = gxk .> 0.0
 	yneg = gyk .< 0.0
 	xneg = gxk .< 0.0
-  alpha = -Inf
+  	alpha = -Inf
 	alphapeer = 0
 	gamma = zeros(getnrdmu(D.Data))
 	beta = zeros(getnrdmu(D.Data))
@@ -109,7 +109,7 @@ function (D::DDF{FreeDisposal,T})(Xk::Array,Yk::Array,gxk::Array,gyk::Array) whe
 		return DEAResult(NaN)
 	end
 
-	X,Y,gx,gy = getdata(D)[1:end]
+	X,Y,gx,gy = D[1:end]
 
 	#Find zero entries in gxk,gyk
 	gxk0 = map(isapprox,gxk,0.0.*ones(size(gxk)))
@@ -124,13 +124,13 @@ function (D::DDF{FreeDisposal,T})(Xk::Array,Yk::Array,gxk::Array,gyk::Array) whe
 	return DEAResult(beta,beta.*gxk,beta.*gyk,getpeers(DGRres))
 end
 
-function (DMU::DDF{S,T})() where {S<:AbstractDataEnvelopment,T<:RS}
-  	Data = getdata(DMU)
+function (D::DDF{S,T})() where {S<:AbstractDataEnvelopment,T<:RS}
+  	Data = getdata(D)
   	res = Array{DEAResult}(getnrdmu(Data))
 
     #@sync @parallel
   	for k in eachindex(Data)
-  		res[k] = DMU(Data[k]...)
+  		res[k] = D(Data[k]...)
   	end
 
   	return res

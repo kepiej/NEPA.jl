@@ -13,9 +13,9 @@ Base.eltype{S,T}(::Type{AbstractDEA{S,T}}) = (S, T)
 Base.size(A::AbstractDEA) = size(getdata(A))
 Base.IndexStyle(::Type{AbstractDEA}) = IndexLinear()
 
-function Base.getindex(A::AbstractDEA, i::Int)
-	1 <= i <= size(A,1) || throw(BoundsError(A, i))
-	return getdata(A)[i]
+function Base.getindex(A::AbstractDEA, I)
+	all(1 .<= I .<= size(A,1)) || throw(BoundsError(A, I))
+	return getdata(A)[I]
 end
 
 # Broken since Julia 0.5! Will it ever come back?

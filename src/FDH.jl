@@ -19,7 +19,7 @@ end
 
 # Solve FDH program under VRS with (Xk,Yk) as evaluation point
 function (F::FDH{VRS})(Xk::Array,Yk::Array)
-  X,Y = getdata(F)[1:end]
+  X,Y = F[1:end]
   dompeer = NaN
   dom = find(all(Y .>= Yk,2) & all(X .<= Xk,2))
   if(F.input) #Input-oriented
@@ -48,7 +48,7 @@ end
 
 # Solve FDH program under NDRS with (Xk,Yk) as evaluation point
 function (F::FDH{NDRS})(Xk::Array,Yk::Array)
-  X,Y = getdata(F)[1:end]
+  X,Y = F[1:end]
   K = size(X,1)
   dompeer = NaN
   domx = find(all(X .<= Xk,2))
@@ -80,7 +80,7 @@ end
 
 # Solve FDH program under CRS with (Xk,Yk) as evaluation point
 function (F::FDH{CRS})(Xk::Array,Yk::Array)
-  X,Y = getdata(F)[1:end]
+  X,Y = F[1:end]
   K = size(X,1)
   dompeer = NaN
   dom = find(maximum(reshape(Yk,1,:)./Y,2) .<= minimum(reshape(Xk,1,:)./X,2))
@@ -112,7 +112,7 @@ end
 
 # Solve FDH program under NIRS with (Xk,Yk) as evaluation point
 function (F::FDH{NIRS})(Xk::Array,Yk::Array)
-  X,Y = getdata(F)[1:end]
+  X,Y = F[1:end]
   K = size(X,1)
   dompeer = NaN
   domy = find(all(Y .>= Yk,2))
